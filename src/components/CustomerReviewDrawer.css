@@ -1,0 +1,70 @@
+.review-drawer-static {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.review-drawer {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px #bcae9e44;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  min-width: 320px;
+  max-width: 95vw;
+  position: relative;
+}
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.drawer-close {
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #b71c1c;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.drawer-input, .drawer-textarea {
+  width: 100%;
+  margin-bottom: 1em;
+  padding: 0.7em;
+  border-radius: 6px;
+  border: 1px solid #e0c08d;
+  font-size: 1em;
+}
+.drawer-rating {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 1em;
+}
+.drawer-rating .active {
+  color: #FFD700;
+}
+.drawer-submit {
+  width: 100%;
+  background: #7c5a3a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.8em;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  transition: background 0.2s;
+}
+.drawer-submit:disabled {
+  background: #bcae9e;
+  cursor: not-allowed;
+}

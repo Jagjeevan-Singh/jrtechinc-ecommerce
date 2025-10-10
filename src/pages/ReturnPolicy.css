@@ -1,0 +1,27 @@
+.return-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.return-container h1 {
+  font-size: 28px;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.return-container p {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.return-container ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.return-container li {
+  margin-bottom: 8px;
+}

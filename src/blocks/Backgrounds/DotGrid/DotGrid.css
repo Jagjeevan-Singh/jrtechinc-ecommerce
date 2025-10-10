@@ -1,0 +1,28 @@
+.dot-grid {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  z-index: 0;
+  background: #f7f7fa;
+  overflow: hidden;
+}
+
+.dot-grid__wrap {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.dot-grid__canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .dot-grid {
+    height: 100px;
+  }
+}

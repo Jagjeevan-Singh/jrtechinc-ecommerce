@@ -1,0 +1,44 @@
+.account-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.account-container h1 {
+  color: #0077ff;
+  text-align: center;
+}
+
+.account-details {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 6px;
+  margin: 20px 0;
+}
+
+.account-details p {
+  margin: 6px 0;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-table th, .order-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.order-table th {
+  background: #f4f4f4;
+}
+
+@media (max-width: 768px) {
+  .order-table th, .order-table td {
+    font-size: 14px;
+    padding: 6px;
+  }
+}
