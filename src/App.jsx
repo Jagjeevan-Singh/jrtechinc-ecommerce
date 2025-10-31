@@ -17,6 +17,7 @@ import Terms from "./pages/Terms";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ReturnPolicy from "./pages/ReturnPolicy";
 import ShippingPolicy from "./pages/ShippingPolicy";
+import CancellationRefundPolicy from "./pages/CancellationRefundPolicy";
 import ContactUs from "./components/ContactUs";
 import AdminDashboard from "./components/AdminDashboard";
 import CheckoutPage from "./pages/CheckoutPage";   // ✅ NEW
@@ -219,7 +220,7 @@ function App() {
         <Route path="/privacy" element={<Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}><PrivacyPolicy /></Layout>} />
         <Route path="/return-policy" element={<Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}><ReturnPolicy /></Layout>} />
         <Route path="/shipping-policy" element={<Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}><ShippingPolicy /></Layout>} />
-
+        <Route path="/return-cancel-policy" element={<Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}><CancellationRefundPolicy /></Layout>} />
         <Route path="/" element={
           <Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}>
             <ProductsPage products={products} onAdd={addToCart} onWishlist={handleWishlistToggle} />

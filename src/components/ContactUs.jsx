@@ -14,7 +14,7 @@ const ContactUs = () => {
       <div className="contact-details">
         <p><strong>Phone:</strong> +91-93104-75549</p>
         <p><strong>Email:</strong> jrtechinc21@gmail.com</p>
-        <p><strong>Address:</strong> 123, Tech Park, New Delhi, India</p>
+        <p><strong>Address:</strong> Pocket A8/129, Kalkaji Extension, New Delhi, India</p>
       </div>
 
       {!submitted ? (

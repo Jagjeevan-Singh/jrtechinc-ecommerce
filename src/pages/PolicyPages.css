@@ -2,6 +2,7 @@
   background: #f7f7fa;
   min-height: 100vh;
   padding: 40px 0;
+  padding-top: 100px;
 }
 
 .policy-page-container {
@@ -14,7 +15,7 @@
 }
 
 .terms-section, .policy-blocks {
-  margin-top: 18px;
+  margin-top: 24px;
 }
 
 .terms-block, .policy-block {
