@@ -1,22 +1,61 @@
-import React from "react";
-import "./ReturnPolicy.css";
+import React from 'react';
+import './PolicyPages.css';
 
-const ReturnPolicy = () => {
-  return (
-    <div className="return-container">
+const ReturnPolicy = () => (
+  <div className="policy-page-bg">
+    <div className="policy-page-container">
       <h1>Return Policy</h1>
-      <p>
-        We want you to be fully satisfied with your purchase from JR Tech Inc. If 
-        you are not happy with your product, please review our return policy below:
-      </p>
-      <ul>
-        <li>Items can be returned within 7 days of delivery.</li>
-        <li>Products must be in unused and original condition.</li>
-        <li>Refunds will be processed within 5–7 business days after approval.</li>
-        <li>Customer is responsible for return shipping costs unless product is defective.</li>
-      </ul>
+      <div className="policy-blocks">
+        <div className="policy-block">
+          <div className="policy-block-number">1</div>
+          <div className="policy-block-content">
+            <h2>Eligibility for Returns</h2>
+            <p>
+              You may request a return or a refund for products that are <b>damaged or defective upon arrival</b>. We do not accept returns for products that have been opened or used due to health and safety regulations.
+            </p>
+          </div>
+        </div>
+        <div className="policy-block">
+          <div className="policy-block-number">2</div>
+          <div className="policy-block-content">
+            <h2>Damaged or Defective Items</h2>
+            <p>
+              If your product arrives damaged or defective, please contact us within <b>7 days of delivery</b>. You must provide your order number and clear photos of the damaged item and its packaging. We will assess the issue and, if approved, offer you a full refund or a replacement at no additional cost.
+            </p>
+          </div>
+        </div>
+        <div className="policy-block">
+          <div className="policy-block-number">3</div>
+          <div className="policy-block-content">
+            <h2>Non-Returnable Items</h2>
+            <ul>
+              <li>Products that have been opened or used.</li>
+              <li>Items returned after the 7-day grace period.</li>
+              <li>Products not purchased directly from our website.</li>
+            </ul>
+          </div>
+        </div>
+        <div className="policy-block">
+          <div className="policy-block-number">4</div>
+          <div className="policy-block-content">
+            <h2>Refund Process</h2>
+            <p>
+              Once your return request is approved, your refund will be processed to the original payment method within <b>4-5</b> business days. The time it takes for the refund to appear on your statement may vary depending on your bank.
+            </p>
+          </div>
+        </div>
+        <div className="policy-block">
+          <div className="policy-block-number">5</div>
+          <div className="policy-block-content">
+            <h2>Contact Us</h2>
+            <p>
+              To initiate a return or if you have any questions about this policy, please contact our customer service team at <a href="mailto:jrtechinc21@gmail.com"><b>jrtechinc21@gmail.com</b></a> or call us at <b>8527914649</b> with your order number ready.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default ReturnPolicy;

@@ -1,0 +1,103 @@
+/* ----------------------------------------------------
+ * AdminDashboard.css
+ * Global styles to ensure full-screen layout and prevent overflow.
+ * Styles below target the List View and the Editor View for polish.
+ * ---------------------------------------------------- */
+
+/* --- Base & Layout --- */
+
+/* Ensure the root element takes up minimum full screen height */
+.admin-app {
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Base styles for the entire view */
+body {
+    margin: 0;
+    padding: 0;
+    /* CRITICAL: Prevents horizontal scroll caused by table/form elements */
+    overflow-x: hidden; 
+    font-family: 'Poppins', sans-serif;
+    background-color: #f3f4f6; /* Lighter base gray for professionalism */
+}
+
+/* --- Global Table Enhancements (renderList) --- */
+
+/* Enhance the shadow/border of the table container */
+.admin-app .shadow-xl {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+}
+
+/* Style the header cells */
+.admin-app table th {
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    background-color: #f9fafb; /* Lightest gray for table header */
+    border-bottom: 2px solid #e5e7eb;
+}
+
+/* Style for rows on hover (visual feedback) */
+.admin-app table tbody tr:hover {
+    background-color: #fefce8; /* Light amber background on hover */
+    transition: background-color 0.2s ease;
+}
+
+/* Action button styles in the list (Edit/Delete) */
+.admin-app td .bg-amber-50,
+.admin-app td .bg-red-50 {
+    transition: background-color 0.2s, color 0.2s;
+    border-radius: 6px;
+    border: 1px solid transparent;
+}
+.admin-app td .bg-amber-50:hover {
+    background-color: #fff3c4;
+    border-color: #fcd34d;
+}
+.admin-app td .bg-red-50:hover {
+    background-color: #fee2e2;
+    border-color: #f87171;
+}
+
+/* FIX: Force image and parent cell to be small */
+.admin-app table tbody td:first-child {
+    /* Target the image column (first TD) to be a fixed small size */
+    width: 60px !important; 
+    min-width: 60px !important;
+    max-width: 60px !important;
+    padding: 0.5rem 0.75rem !important; 
+    overflow: hidden;
+}
+
+.admin-app table img {
+    /* Ensure object-fit is respected regardless of image size */
+    width: 40px !important; /* Explicitly enforce width */
+    height: 40px !important; /* Explicitly enforce height */
+    object-fit: cover !important; 
+    border-radius: 4px; /* Optional: Clean up corner radius */
+}
+
+
+/* --- Editor & Form Enhancements (renderEditor) --- */
+
+/* Ensures the header itself doesn't force full viewport width outside its container */
+.admin-app header {
+    width: 100%;
+}
+
+/* Ensure all form inputs have consistent shadow/transition */
+.admin-app input[type="text"],
+.admin-app input[type="password"],
+.admin-app input[type="number"],
+.admin-app textarea {
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Style for array editor buttons (Add Item) */
+.admin-app .bg-amber-100 {
+    border-radius: 6px;
+    border: 1px solid #fcd34d;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}

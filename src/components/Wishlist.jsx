@@ -14,7 +14,7 @@ function ProductImage({ src, alt, ...props }) {
 import { useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaTrash } from 'react-icons/fa';
 import './Wishlist.css';
-import ProductRating2 from './ProductRating2';
+import ProductRating2 from '../pages/ProductRating2';
 
 function Wishlist({ items = [], onRemove, onMoveToCart }) {
   const navigate = useNavigate();

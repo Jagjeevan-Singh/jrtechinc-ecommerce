@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
-import logoImg from "../assets/logo.jpeg";
+import logoImg from "../assets/logoround.jpeg";
 import { FaSearch, FaShoppingCart, FaHeart, FaUser } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 

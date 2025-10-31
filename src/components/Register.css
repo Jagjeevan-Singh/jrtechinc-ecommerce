@@ -1,70 +1,112 @@
-.register-container {
-  max-width: 400px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-  padding: 32px 28px 28px 28px;
+/* --- Global Container --- */
+.auth-container {
+    padding: 60px 20px;
+    background-color: #f7f7f7;
+    min-height: calc(100vh - 150px);
+    display: flex;
+    justify-content: center; /* Center the form horizontally */
+    align-items: flex-start; /* Align to the top of the viewport */
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* --- Main Form Card --- */
+.register-main-box {
+    max-width: 450px; /* Constrained width for focus */
+    width: 100%;
+    margin-top: 50px;
+    
+    /* Card Styling */
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12); /* Soft, professional shadow */
+    border: 1px solid #e0e0e0;
+    text-align: center;
 }
 
 .register-title {
-  text-align: center;
-  font-size: 2em;
-  font-weight: 600;
-  margin-bottom: 18px;
-  color: #1a6ed8;
+    font-size: 2em;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 5px;
 }
 
-.register-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+.register-subtitle {
+    color: #7f8c8d;
+    margin-bottom: 25px;
+    font-size: 1em;
 }
 
-.register-form label {
-  font-weight: 500;
-  margin-bottom: 4px;
+/* --- Form Group and Inputs --- */
+.register-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Clean vertical spacing between inputs */
+    margin-bottom: 25px;
 }
 
-.register-form input {
-  padding: 10px 12px;
-  border: 1px solid #d0d0d0;
-  border-radius: 6px;
-  font-size: 1em;
-  outline: none;
-  transition: border 0.2s;
+.input-field {
+    padding: 14px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 1em;
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.register-form input:focus {
-  border: 1.5px solid #1a6ed8;
+.input-field:focus {
+    border-color: #0077ff;
+    box-shadow: 0 0 0 2px rgba(0, 119, 255, 0.2);
+    outline: none;
 }
 
-.register-btn {
-  background: #1a6ed8;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 12px 0;
-  font-size: 1.1em;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: background 0.2s;
+/* --- Buttons (Using consistent classes) --- */
+
+.btn {
+    padding: 14px 20px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 100%; /* Ensure buttons are full width */
 }
 
-.register-btn:hover {
-  background: #155bb5;
+.primary-btn { /* For Register button */
+    background: #0077ff;
+    color: white;
+    margin-top: 5px;
 }
 
-.register-link {
-  text-align: center;
-  margin-top: 16px;
-  color: #1a6ed8;
-  font-size: 0.98em;
+.primary-btn:hover {
+    background: #0056cc;
+    transform: translateY(-2px);
 }
 
-@media (max-width: 600px) {
-  .register-container {
-    padding: 18px 6px 18px 6px;
-  }
+.secondary-btn { /* For Back to Login button */
+    background: #f8f9fa;
+    color: #555;
+    border: 1px solid #ced4da;
+    font-weight: 500;
+    text-transform: none;
+    margin-top: 15px;
+}
+
+.secondary-btn:hover {
+    background: #e9ecef;
+    color: #333;
+}
+
+/* --- Media Queries --- */
+@media (max-width: 500px) {
+    .register-main-box {
+        padding: 30px 15px;
+        margin-top: 20px;
+    }
+    .register-title {
+        font-size: 1.8em;
+    }
 }

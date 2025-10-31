@@ -1,43 +1,107 @@
 import React, { useState, useEffect } from "react";
-import "./Home.css"; // We'll create this file for styling
+import { Link } from "react-router-dom"; // Import Link for routing
+import "./Home.css"; 
+// Assuming your assets are correctly imported
 import banner1 from "../assets/Banner1.jpeg";
 import banner2 from "../assets/Banner2.jpeg";
 import banner3 from "../assets/Banner3.jpeg";
 
 const Home = () => {
-  const banners = [banner1, banner2, banner3];
-  const [currentIndex, setCurrentIndex] = useState(0);
+    // --- Banner State & Logic ---
+    const banners = [banner1, banner2, banner3];
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Auto-slide every 3 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === banners.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [banners.length]);
+    // --- Product State ---
+    const [featuredProducts, setFeaturedProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  return (
-    <div className="home-container">
-      {/* Auto Scrolling Banner */}
-      <div className="banner-slider">
-        {banners.map((img, index) => (
-          <div
-            className={`banner-slide ${
-              index === currentIndex ? "active" : ""
-            }`}
-            key={index}
-          >
-            <img src={img} alt={`Banner ${index + 1}`} />
-          </div>
-        ))}
-      </div>
+    // Auto-slide every 3 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentIndex((prevIndex) =>
+                prevIndex === banners.length - 1 ? 0 : prevIndex + 1
+            );
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [banners.length]);
 
-      {/* Featured Section */}
-      
-    </div>
-  );
+    // --- API Fetch Logic ---
+    useEffect(() => {
+        const fetchFeatured = async () => {
+            try {
+                // Fetch products from your API. We limit it to 4 to show featured items.
+                const response = await fetch("http://localhost:3000/api/products");
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Take the first 4 products as "featured"
+                setFeaturedProducts(data.slice(0, 4)); 
+            } catch (error) {
+                console.error("Could not fetch featured products:", error);
+                // Fail gracefully: featuredProducts will remain empty
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchFeatured();
+    }, []); // Run only once on component mount
+
+    return (
+        <div className="home-container">
+            {/* Auto Scrolling Banner */}
+            <div className="banner-slider">
+                {banners.map((img, index) => (
+                    <div
+                        className={`banner-slide ${
+                            index === currentIndex ? "active" : ""
+                        }`}
+                        key={index}
+                    >
+                        {/* Adding a Link around the banner is common for promotions */}
+                        <img src={img} alt={`Banner ${index + 1}`} />
+                    </div>
+                ))}
+            </div>
+
+            {/* Featured Products Section */}
+            <section className="featured-section">
+                <h2>Featured Products</h2>
+                
+                {loading && <p>Loading featured items...</p>}
+
+                {!loading && featuredProducts.length === 0 && (
+                    <p>No featured products available. Add some data via Postman!</p>
+                )}
+                
+                <div className="featured-grid">
+                    {featuredProducts.map((product) => (
+                        // Use Link to route to the individual product page
+                        <Link 
+                            to={`/products/${product._id}`} 
+                            key={product._id} 
+                            className="featured-card-link"
+                        >
+                            <div className="product-card">
+                                {/* Display the first image in the array, or a placeholder */}
+                                <img 
+                                    src={product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls[0] : 'placeholder.jpg'} 
+                                    alt={product.name} 
+                                />
+                                <h3>{product.name}</h3>
+                                {/* Display the discounted price, using the virtual or actual field */}
+                                <p className="price">₹{product.discountedPrice || product.price || 'N/A'}</p> 
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </section>
+        </div>
+    );
 };
 
 export default Home;

@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JR Tech Inc - Products API Demo</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 20px; max-width: 900px; margin: auto; }
+      .product { border: 1px solid #ddd; padding: 12px; margin: 8px 0; border-radius: 6px; }
+      .product img { max-width: 120px; height: auto; float: right; margin-left: 12px; }
+      form > * { display:block; margin-bottom:8px; }
+      label { font-weight:600 }
+      input[type="number"] { width: 100px; } /* Small width for price fields */
+    </style>
+  </head>
+  <body>
+    <h1>JR Tech Inc - Products API Demo</h1>
+    <p>Use this simple page to test the local API endpoints.</p>
+
+    <section>
+      <h2>Create product</h2>
+      <form id="createForm">
+        <label>Name <input id="name" required></label>
+        <label>Category <input id="category"></label> 
+        <div style="display: flex; gap: 20px;">
+            <label>MRP <input id="mrp" type="number" min="1"></label> 
+            <label>Price (Discounted) <input id="discountedPrice" type="number" min="1" required></label> 
+        </div>
+        <label>Image URL <input id="imageUrls"></label> 
+        <label>Description <textarea id="description"></textarea></label>
+        <button type="submit">Create</button>
+      </form>
+      <div id="createResult"></div>
+    </section>
+
+    <hr/>
+
+    <section>
+      <h2>Products</h2>
+      <button id="refresh">Refresh list</button>
+      <div id="products"></div>
+    </section>
+
+    <script>
+      const api = '/api/products';
+
+      async function fetchProducts() {
+        try {
+            const res = await fetch(api);
+            const data = await res.json();
+            const container = document.getElementById('products');
+            container.innerHTML = '';
+            
+            data.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'product';
+                
+                // Read price from the correct field: discountedPrice
+                const price = p.discountedPrice !== undefined ? p.discountedPrice : 'N/A';
+                
+                // Display Category and MRP/Price
+                div.innerHTML = `
+                    <div style="float:right; text-align:right;">
+                        ${p.imageUrls && p.imageUrls.length > 0 ? `<img src="${p.imageUrls[0]}" alt="${p.name}">` : ''}
+                        <small>Category: ${p.category || 'N/A'}</small><br>
+                        <small>MRP: ₹${p.mrp || 'N/A'}</small>
+                    </div>
+                    <strong>${p.name}</strong> — **₹${price}**<br/>
+                    <div>${p.description || ''}</div>
+                    <div style="clear:both"></div>
+                `;
+                container.appendChild(div);
+            });
+        } catch (error) {
+             document.getElementById('products').innerHTML = '<div style="color:red;">Error fetching products. Check server status.</div>';
+        }
+      }
+
+      document.getElementById('refresh').addEventListener('click', fetchProducts);
+
+      document.getElementById('createForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // 1. Collect all data from the new fields
+        const payload = {
+            name: document.getElementById('name').value,
+            category: document.getElementById('category').value,
+            mrp: Number(document.getElementById('mrp').value),
+            discountedPrice: Number(document.getElementById('discountedPrice').value),
+            
+            // Image URLs are sent as a single string, convert to array for the schema
+            imageUrls: document.getElementById('imageUrls').value 
+                        ? [document.getElementById('imageUrls').value] 
+                        : undefined, 
+            
+            description: document.getElementById('description').value,
+            
+            // CRITICAL: We MUST include the 'variants' array, even if empty, 
+            // to satisfy the complex schema and prevent the E11000 error, 
+            // even if the index is rebuilt.
+            variants: [] 
+        };
+        
+        const res = await fetch(api, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        const body = await res.json();
+        
+        // Use the proper response body structure
+        document.getElementById('createResult').innerText = res.ok 
+            ? 'Created: ' + (body._id || body.message) 
+            : 'Error: ' + (body.error || body.message || JSON.stringify(body));
+
+        fetchProducts();
+      });
+
+      // initial load
+      fetchProducts().catch(() => {});
+    </script>
+  </body>
+</html>

@@ -1,44 +1,204 @@
-.account-container {
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+/* --- Global Container --- */
+.login-container {
+    padding: 60px 20px;
+    background-color: #f7f7f7; /* Light background for contrast */
+    min-height: calc(100vh - 150px); /* Fill screen vertically */
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-.account-container h1 {
-  color: #0077ff;
-  text-align: center;
+/* --- Main Layout Box (Two Columns) --- */
+.login-main-box {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Soft shadow */
+    border-radius: 10px;
+    overflow: hidden; /* Contains children's rounded corners */
+    background-color: #fff;
 }
 
-.account-details {
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 6px;
-  margin: 20px 0;
+/* --- Left Column: Sign In Form --- */
+.login-form-col {
+    flex: 1; /* Takes up one part of the space */
+    padding: 40px;
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.account-details p {
-  margin: 6px 0;
+.login-form-col h2 {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #2c3e50;
 }
 
-.order-table {
-  width: 100%;
-  border-collapse: collapse;
+.login-form-col p {
+    color: #7f8c8d;
+    margin-bottom: 25px;
+    line-height: 1.5;
 }
 
-.order-table th, .order-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: center;
+/* --- Right Column: Registration Prompt --- */
+.login-register-col {
+    flex: 1; /* Takes up one part of the space */
+    padding: 40px;
+    background-color: #2c3e50; /* Dark, contrasting background */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center;
+    text-align: center;
 }
 
-.order-table th {
-  background: #f4f4f4;
+.login-register-col h2 {
+    color: #fff;
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 10px;
 }
 
+.login-register-col p {
+    margin-bottom: 25px;
+    opacity: 0.8;
+}
+
+/* --- Form Elements and Buttons --- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    border-color: #0077ff;
+    outline: none;
+}
+
+.btn {
+    padding: 12px 20px;
+    font-size: 1em;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    text-transform: uppercase;
+}
+
+.primary-btn { /* For Sign In */
+    background: #0077ff;
+    color: white;
+    margin-top: 10px;
+}
+
+.primary-btn:hover {
+    background: #0056cc;
+}
+
+.secondary-btn { /* For Create an Account */
+    background: #4492e4; 
+    color: white;
+    border: 1px solid #4492e4;
+    max-width: 250px;
+    width: 100%;
+}
+
+.secondary-btn:hover {
+    background: #3a81cf;
+}
+
+.google-btn {
+    background: white;
+    color: #333;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.google-btn:hover {
+    background: #f0f0f0;
+}
+
+.google-logo {
+    width: 20px;
+    height: 20px;
+}
+
+.forgot-link {
+    background: none;
+    border: none;
+    color: #7f8c8d;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: 5px;
+    padding: 0;
+}
+
+/* --- Responsiveness: Stack columns on Mobile --- */
 @media (max-width: 768px) {
-  .order-table th, .order-table td {
-    font-size: 14px;
-    padding: 6px;
-  }
+    .login-main-box {
+        flex-direction: column;
+    }
+    .login-register-col {
+        padding: 30px 40px;
+        border-radius: 0 0 10px 10px;
+    }
+    .login-form-col {
+        padding: 30px 40px;
+    }
+}
+
+/* --- Order Status Badges --- */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.status-badge.success {
+    background-color: #d4edda; /* Light Green */
+    color: #155724; /* Dark Green */
+}
+
+.status-badge.failed {
+    background-color: #f8d7da; /* Light Red */
+    color: #721c24; /* Dark Red */
+}
+
+.status-badge.pending {
+    background-color: #fff3cd; /* Light Yellow */
+    color: #856404; /* Dark Yellow */
+}
+
+.retry-btn {
+    background-color: #ff9800; /* Orange for action */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.retry-btn:hover {
+    background-color: #e68a00;
 }

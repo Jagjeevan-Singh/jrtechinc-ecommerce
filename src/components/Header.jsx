@@ -6,10 +6,14 @@ import { useState } from 'react';
 import logo from '../assets/logoround.jpeg';
 import SideBar from './SideBar';
 
-function Header({ cartCount = 0, wishlistCount = 0 }) {
+// NOTE: Add currentUser prop to receive authentication state from App.jsx
+function Header({ cartCount = 0, wishlistCount = 0, currentUser }) { 
   const [showSearch, setShowSearch] = useState(false);
   const [localSearch, setLocalSearch] = useState('');
   const navigate = useNavigate();
+
+  // Determine the correct destination: /account (dashboard) or /login (auth page)
+  const accountDestination = currentUser ? '/account' : '/login';
 
   const handleSearchClick = () => {
     setShowSearch(true);
@@ -31,9 +35,11 @@ function Header({ cartCount = 0, wishlistCount = 0 }) {
       navigate('/products');
     }
   };
+  
   return (
     <header className="header">
       <SideBar />
+      
       {/* Left: Circular Text Logo */}
       <div className="nav-left">
         <NavLink to="/" className="circular-logo">
@@ -48,10 +54,11 @@ function Header({ cartCount = 0, wishlistCount = 0 }) {
           </div>
         </NavLink>
       </div>
+      
       {/* Right: Icons or Search */}
       <div className="nav-right">
         {!showSearch && (
-          <button className="icon-navlink" onClick={handleSearchClick}>
+          <button className="icon-navlink" onClick={handleSearchClick} aria-label="Search">
             <FaSearch />
           </button>
         )}
@@ -79,17 +86,22 @@ function Header({ cartCount = 0, wishlistCount = 0 }) {
             </form>
           </div>
         )}
-        <NavLink to="/wishlist" className="icon-navlink">
+        
+        <NavLink to="/wishlist" className="icon-navlink" aria-label="Wishlist">
           <FaHeart />
           {wishlistCount > 0 && <span className="badge">{wishlistCount}</span>}
         </NavLink>
-        <NavLink to="/cart" className="icon-navlink">
+        
+        <NavLink to="/cart" className="icon-navlink" aria-label="Shopping Cart">
           <FaShoppingCart />
           {cartCount > 0 && <span className="badge">{cartCount}</span>}
         </NavLink>
-        <NavLink to="/account" className="icon-navlink">
+        
+        {/* --- THE FIX: Conditional Navigation --- */}
+        <NavLink to={accountDestination} className="icon-navlink" aria-label="Account">
           <FaUser />
         </NavLink>
+        {/* -------------------------------------- */}
       </div>
     </header>
   );

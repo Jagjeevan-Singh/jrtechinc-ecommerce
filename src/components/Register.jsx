@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Register.css';
-
-import Header from './Header';
+// NOTE: Assuming Header is rendered by Layout, this import is likely redundant:
+// import Header from './Header';
+import './Register.css'; // Use the dedicated stylesheet
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -17,17 +17,23 @@ export default function Register() {
   };
 
   return (
-    <div className="register-bg">
-      <Header />
-      <div className="register-box">
-        <h2 className="register-title">Create Account</h2>
-        <form onSubmit={handleRegister} autoComplete="on">
+    // Use a clean wrapper for the whole page content
+    <div className="auth-container"> 
+      
+      {/* Main Form Card */}
+      <div className="register-main-box"> 
+        <h2 className="register-title">Create Your Account</h2>
+        <p className="register-subtitle">Access your history, saved items, and personalized offers.</p>
+        
+        <form onSubmit={handleRegister} autoComplete="on" className="register-form-group">
+          {/* Input fields are wrapped in a general form group */}
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Email Address"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className="register-input"
+            className="input-field" // Unified input class
+            autoComplete="email"
             required
           />
           <input
@@ -35,7 +41,8 @@ export default function Register() {
             placeholder="Password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className="register-input"
+            className="input-field" // Unified input class
+            autoComplete="new-password"
             required
           />
           <input
@@ -43,12 +50,18 @@ export default function Register() {
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)}
-            className="register-input"
+            className="input-field" // Unified input class
+            autoComplete="new-password"
             required
           />
-          <button type="submit" className="register-btn">Register</button>
+          <button type="submit" className="btn primary-btn register-btn-submit">
+            Register
+          </button>
         </form>
-        <button className="register-back-btn" onClick={() => navigate("/login")}>Back to Login</button>
+        
+        <button className="register-back-btn secondary-btn" onClick={() => navigate("/login")}>
+          Back to Sign In
+        </button>
       </div>
     </div>
   );
