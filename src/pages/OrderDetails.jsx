@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+const BACKEND_HOST = import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
 import { useParams, useNavigate } from 'react-router-dom';
 import './OrderSuccess.css';
 
@@ -126,8 +127,12 @@ const OrderDetails = () => {
           const augmented = await Promise.all(json.items.map(async (it) => {
                 if (it.productId) {
               try {
-                const pRes = await fetch(`/api/products/${it.productId}`);
-                if (pRes.ok) {
+                let pRes;
+                try { pRes = await fetch(`/api/products/${it.productId}`); } catch(e) { pRes = null; }
+                if (!pRes || !pRes.ok) {
+                  try { pRes = await fetch(BACKEND_HOST + `/api/products/${it.productId}`); } catch(e) { pRes = pRes || null; }
+                }
+                if (pRes && pRes.ok) {
                   const pJson = await pRes.json();
                   return { ...it, name: it.name || pJson.name, imageUrl: it.imageUrl || pJson.imageUrls?.[0] || pJson.imageUrl };
                 }
