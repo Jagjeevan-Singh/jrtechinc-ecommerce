@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: jr-tech-inc
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm start"
