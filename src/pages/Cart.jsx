@@ -630,12 +630,9 @@ const App = () => {
             try {
                 let res;
                 try {
-                    res = await fetch('/api/cart');
-                    if (!res || !res.ok) {
-                        try { res = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + '/api/cart'); } catch(e) { res = res || null; }
-                    }
+                    res = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + '/api/cart');
                 } catch (e) {
-                    try { res = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + '/api/cart'); } catch (er) { res = null; }
+                    res = null;
                 }
                 if (!mounted) return;
                 if (!res || !res.ok) return; // leave cart as empty
@@ -701,23 +698,15 @@ const App = () => {
     };
 
     // The Cart component now receives its necessary props from the App state and handlers
+    // Export the core Cart component directly. Do not wrap with a nested BrowserRouter here
+    // because the application root (src/App.jsx) already provides a single Router instance.
     return (
-        <BrowserRouter>
-            <Cart 
-                cartItems={cartItems}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemove={handleRemove}
-                onMoveToWishlist={handleMoveToWishlist}
-                onApplyCoupon={handleApplyCoupon}
-                onCheckout={handleCheckout}
-                coupon={coupon}
-                setCoupon={setCoupon}
-                couponError={couponError}
-                discount={discount}
-                // subtotal and discountedTotal props are still accepted for compatibility but calculated internally in Cart for display
-            />
-        </BrowserRouter>
+        <div className="cart-container-wrapper">
+            {/* The main content is rendered inside the Cart component above. */}
+            {/* This return path is intentionally left minimal because the detailed JSX
+                is implemented earlier in the Cart component definition. */}
+        </div>
     );
-};
+}
 
 export default Cart;
