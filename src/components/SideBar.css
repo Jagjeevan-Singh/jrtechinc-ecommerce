@@ -3,7 +3,9 @@
   border: none;
   color: #222;
   position: absolute;
-  top: 32px;
+  /* vertically center hamburger inside the header container */
+  top: 50%;
+  transform: translateY(-50%);
   left: 32px;
   z-index: 1101;
   cursor: pointer;
@@ -70,7 +72,7 @@
 .sidebar-links li {
   width: 100%;
 }
-.sidebar-links a {
+.sidebar-links .sidebar-link-button {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -79,9 +81,59 @@
   font-size: 1.18rem;
   font-weight: 500;
   text-decoration: none;
-  border-radius: 0;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
   transition: background 0.15s;
 }
-.sidebar-links a:hover, .sidebar-links a.active {
+.sidebar-links .sidebar-link-button:hover {
   background: #181818;
+}
+
+/* Make the sidebar narrower on small/mobile viewports so it doesn't cover the whole page */
+@media (max-width: 768px) {
+  /* Target the nav-based mobile sidebar specifically and force a narrow
+     drawer so it won't cover the entire viewport. Using nav.sidebar.mobile-nav
+     increases specificity and the !important ensures this wins over other rules. */
+  nav.sidebar.mobile-nav {
+    width: min(75vw, 280px) !important;
+    max-width: 95vw !important;
+    box-sizing: border-box !important;
+    left: 0 !important;
+    right: auto !important;
+    overflow: hidden !important;
+  }
+
+  /* Slightly nudge the close button inside the reduced sidebar */
+  .sidebar-close {
+    left: 16px;
+    top: 18px;
+    font-size: 1.8rem;
+  }
+
+  /* Move the hamburger icon closer to the left edge on mobile so it doesn't
+     collide with the header logo which is shifted right. */
+  .sidebar-hamburger {
+    left: 8px;
+    /* vertically center hamburger inside the (smaller) mobile header */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1201; /* ensure it's above most header elements */
+  }
+
+  /* Reduce padding on the links so they fit comfortably */
+  .sidebar-links .sidebar-link-button {
+    padding: 14px 18px;
+    font-size: 1rem;
+  }
+}
+
+/* Extra safeguard: if some other CSS is still higher specificity, this rule
+   targets the element type and the two classes to be extra specific. */
+@media (max-width: 768px) {
+  nav.sidebar.mobile-nav.open {
+    transform: translateX(0) !important;
+  }
 }

@@ -2,12 +2,53 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <!-- Use company logo as favicon (dev: reference src asset) -->
+  <link rel="icon" type="image/jpeg" href="/src/assets/logoround.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+  <title>JR TECH INC</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- Chatbot widget CSS -->
+    <link rel="stylesheet" href="/chatbot-widget/widget.css">
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- Chatbot widget (embedded to appear on all pages) -->
+    <div id="jr-chatbot-root" aria-live="polite">
+      <button id="jr-chatbot-toggle" aria-expanded="false" aria-controls="jr-chatbot-panel" title="Chat with us">
+  <img id="jr-chat-toggle-img" src="/src/assets/logoround.jpeg" alt="JR Tech Inc logo" />
+        <span id="jr-chat-fallback" aria-hidden="true">JR</span>
+      </button>
+
+      <aside id="jr-chatbot-panel" role="dialog" aria-label="Help Center" hidden>
+        <header class="panel-header">
+          <div class="panel-title">Help Center</div>
+          <button id="jr-chatbot-close" aria-label="Close help">✖</button>
+        </header>
+
+        <div class="panel-body">
+          <div class="search-wrap">
+            <input id="jr-chat-search" type="search" placeholder="Type a question or keyword..." aria-label="Search help" autocomplete="off" />
+            <button id="jr-chat-search-btn" aria-label="Search">🔍</button>
+            <ul id="jr-suggestions" class="suggestions" role="listbox" aria-label="Suggestions"></ul>
+          </div>
+
+          <div id="jr-chat-content" class="chat-content">
+            <div class="categories" id="jr-categories"></div>
+            <div class="answer-pane" id="jr-answer-pane" hidden>
+              <div id="jr-answer-question" class="answer-question"></div>
+              <div id="jr-answer-text" class="answer-text"></div>
+              <div class="escalation" id="jr-escalation" hidden></div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="panel-footer">
+          <small>Can't find an answer? Email us at <a href="mailto:jrtechinc21@gmail.com">jrtechinc21@gmail.com</a></small>
+        </footer>
+      </aside>
+    </div>
+    <script src="/chatbot-widget/widget.js"></script>
   </body>
 </html>

@@ -1,50 +1,52 @@
-.login-container {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  text-align: center;
+.login-bg {
+  background: #f7f7f7;
+  /* Limit the min-height so the background doesn't become excessively tall on large/laptop screens */
+  min-height: min(calc(100vh - 110px), 400px);
+  padding: 40px 20px;
+  margin-top: 110px; /* space for fixed header */
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-.login-container h1 {
-  color: #0077ff;
-  margin-bottom: 20px;
-}
-
-.login-container form {
+.login-main-box {
+  max-width: 960px;
+  margin: 0 auto;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 24px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
 }
 
-.login-container input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.login-form-col {
+  flex: 1;
+  padding: 36px;
+  min-width: 300px;
 }
 
-.login-container button {
-  background: #0077ff;
-  color: white;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
+.login-form-col h2 { font-size: 1.6rem; margin-bottom: 8px; }
+.login-form-col p { color: #666; margin-bottom: 12px; }
+
+.login-form-col form { display:flex; flex-direction:column; gap:12px; }
+.login-form-col .input { padding: 12px; border: 1px solid #ddd; border-radius:8px; }
+.login-btn { background: #0077ff; color:#fff; padding: 10px 14px; border-radius:8px; border:none; cursor:pointer; }
+
+.login-register-col { flex: 1; padding: 28px; background: #2c3e50; color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+.register-btn { background:#e5c593; color:#222; padding:10px 14px; border-radius:8px; border:none; cursor:pointer; }
+.google-btn { background:#db4437; color:#fff; padding:10px 14px; border-radius:8px; border:none; display:inline-flex; align-items:center; gap:8px; }
+.google-logo { width:20px; height:20px; }
+
+.login-error { color: #d32f2f; margin-top:8px; }
+
+@media (max-width: 768px) {
+  .login-main-box { flex-direction: column; }
+  .login-form-col { padding: 20px; }
+  .login-register-col { padding: 18px; }
 }
 
-.login-alt {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.google-btn {
-  background: #db4437;
-  color: white;
-}
-
-.phone-btn {
-  background: #34a853;
-  color: white;
+@media (max-width: 600px) {
+  .login-bg { margin-top: 80px; padding: 20px 12px; }
+  .login-main-box { gap: 12px; }
+  .login-form-col h2 { font-size: 1.4rem; }
 }

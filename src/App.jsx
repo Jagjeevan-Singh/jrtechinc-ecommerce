@@ -21,6 +21,10 @@ import CancellationRefundPolicy from "./pages/CancellationRefundPolicy";
 import ContactUs from "./components/ContactUs";
 import AdminDashboard from "./components/AdminDashboard";
 import CheckoutPage from "./pages/CheckoutPage";   // ✅ NEW
+//import CheckoutPayment from "./pages/CheckoutPayment";
+import OrderSuccess from "./pages/OrderSuccess";
+import OrderDetails from "./pages/OrderDetails";
+import ProductsSidebar from "./pages/ProductsSidebar";
 
 import "./App.css";
 
@@ -37,6 +41,15 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null); 
   const [loadingAuth, setLoadingAuth] = useState(true); 
   const [loadingUser] = useState(false);
+  const [appSearchTerm, setAppSearchTerm] = useState('');
+
+  // Expose global setter so Header can send search terms into App state
+  useEffect(() => {
+    window.setAppSearchTerm = (term) => {
+      try { setAppSearchTerm(String(term || '')); } catch (e) {}
+    };
+    return () => { try { delete window.setAppSearchTerm; } catch (e) {} };
+  }, []);
 
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -204,7 +217,13 @@ function App() {
 
         <Route path="/products" element={
           <Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}>
-            <ProductsPage products={products} onAdd={addToCart} onWishlist={handleWishlistToggle} />
+            <ProductsPage products={products} onAdd={addToCart} onWishlist={handleWishlistToggle} searchTerm={appSearchTerm} setSearchTerm={setAppSearchTerm} />
+          </Layout>
+        } />
+
+        <Route path="/products-sidebar" element={
+          <Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}>
+            <ProductsSidebar onAdd={addToCart} onWishlist={handleWishlistToggle} wishlistItems={wishlistItems} />
           </Layout>
         } />
 
@@ -221,9 +240,25 @@ function App() {
         <Route path="/return-policy" element={<Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}><ReturnPolicy /></Layout>} />
         <Route path="/shipping-policy" element={<Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}><ShippingPolicy /></Layout>} />
         <Route path="/return-cancel-policy" element={<Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}><CancellationRefundPolicy /></Layout>} />
+        
+        <Route path="/checkout" element={<Layout cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)} wishlistCount={wishlistItems.length} currentUser={currentUser}><CheckoutPage cartItems={cartItems} subtotal={subtotal} /></Layout>} />
+        <Route path="/order-success" element={<Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}><OrderSuccess /></Layout>} />
+        
+        {/* Orders route (so /orders links do not open a blank page) */}
+        <Route path="/orders" element={
+          <Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}>
+            <Account />
+          </Layout>
+        } />
+        <Route path="/orders/:id" element={
+          <Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}>
+            <React.Suspense fallback={<div>Loading...</div>}><OrderDetails /></React.Suspense>
+          </Layout>
+        } />
+        
         <Route path="/" element={
           <Layout cartCount={cartCount} wishlistCount={wishlistItems.length} currentUser={currentUser}>
-            <ProductsPage products={products} onAdd={addToCart} onWishlist={handleWishlistToggle} />
+            <ProductsPage products={products} onAdd={addToCart} onWishlist={handleWishlistToggle} searchTerm={appSearchTerm} setSearchTerm={setAppSearchTerm} />
           </Layout>
         } />
 

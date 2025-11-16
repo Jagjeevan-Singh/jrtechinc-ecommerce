@@ -1,0 +1,226 @@
+:root{
+  --jr-widget-bg: #ffffff;
+  --jr-accent: #3e2723;
+  --jr-muted: #6b5a55;
+  --jr-radius: 12px;
+}
+
+/* Reset a bit inside widget */
+.jr-chatbot {
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: var(--jr-muted);
+}
+
+/* Floating button */
+.jr-floating-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 99999;
+  transition: transform .14s ease;
+}
+.jr-floating-btn:active{ transform: scale(.98); }
+.jr-floating-btn img{ width:56px;height:56px;border-radius:50%;object-fit:cover }
+
+/* Panel */
+.jr-panel {
+  position: fixed;
+  right: 20px;
+  bottom: 100px;
+  width: 360px;
+  max-height: 72vh;
+  background: var(--jr-widget-bg);
+  border-radius: var(--jr-radius);
+  box-shadow: 0 20px 48px rgba(27,27,27,0.18);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 99999;
+  transform-origin: bottom right;
+  transition: transform .18s ease, opacity .18s ease;
+  opacity: 0;
+  transform: translateY(8px) scale(.98);
+}
+.jr-panel.open{ opacity: 1; transform: translateY(0) scale(1); }
+
+.jr-panel header{
+  padding: 14px 14px;
+  border-bottom: 1px solid #f0eaea;
+  display:flex;align-items:center;gap:12px;
+}
+.jr-panel header h3{ margin:0;font-size:1rem;color:var(--jr-accent) }
+.jr-panel header .close-btn{ margin-left:auto;background:transparent;border:0;color:var(--jr-muted);cursor:pointer;font-size:1.1rem }
+
+.jr-search-wrap{ padding:12px; border-bottom:1px solid #f6f2f1; }
+.jr-search {
+  display:flex; gap:8px; align-items:center;
+}
+.jr-search input{
+  flex:1; padding:10px 12px; border-radius:8px; border:1px solid #eee; outline:none; font-size:0.95rem;
+}
+.jr-search button{ background:var(--jr-accent); color:#fff; border:0; padding:10px 12px; border-radius:8px; cursor:pointer }
+
+.jr-suggestions{
+  max-height:140px; overflow:auto; margin-top:8px; display:none; background:#fff; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.06);
+}
+.jr-suggestions.open{ display:block }
+.jr-suggestion-item{ padding:8px 10px; cursor:pointer; border-bottom:1px solid #faf6f5; }
+.jr-suggestion-item:hover{ background:#fbf7f6 }
+
+.jr-body{
+  overflow:auto; padding:12px; display:flex; gap:12px; flex-direction:column;
+}
+.jr-category{ margin-bottom:10px }
+.jr-category h4{ margin:0 0 8px 0; font-size:0.95rem; color:var(--jr-accent) }
+.jr-question{ display:block; text-align:left; background:#fff; border:1px solid #f0e6e4; padding:10px 12px; margin-bottom:8px; border-radius:8px; cursor:pointer; color:#403232 }
+.jr-question:hover{ background:#fff9f8 }
+
+.jr-answer{
+  background:#fffaf9; border-left:4px solid var(--jr-accent); padding:10px 12px; border-radius:6px; color:#3f2b29; font-size:0.95rem;
+}
+.jr-escalation{ background:#fff4f2; border-left:4px solid #b34b3b; padding:10px 12px; border-radius:6px; color:#7a2f2f; font-size:0.95rem }
+
+/* Mobile adjustments */
+@media (max-width:420px){
+  .jr-panel{ right:12px; left:12px; width: auto; bottom: 90px; max-height:80vh }
+  .jr-floating-btn{ right:12px; bottom:12px }
+}
+
+/* Mapping for HTML ID-based markup (backwards compatible with the provided widget.html) */
+#jr-chatbot-toggle{ /* map from .jr-floating-btn */
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 99999;
+}
+#jr-chatbot-toggle img{ width:100%;height:100%;border-radius:50%;object-fit:cover }
+#jr-chat-fallback{ position:absolute; display:none; align-items:center; justify-content:center; width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,#f7efe9,#ffffff); color:#3e2723; font-weight:700; font-size:18px; box-shadow:0 4px 12px rgba(0,0,0,0.12); }
+#jr-chatbot-toggle{ position: fixed; right: 20px; bottom: 20px; width:60px; height:60px; border-radius:50%; padding:4px; }
+#jr-chatbot-toggle img{ position:relative; z-index:2 }
+#jr-chat-fallback{ z-index:1 }
+
+#jr-chatbot-panel{ /* map from .jr-panel */
+  position: fixed;
+  right: 20px;
+  bottom: 100px;
+  width: 360px;
+  max-height: 72vh;
+  background: var(--jr-widget-bg, #fff);
+  border-radius: var(--jr-radius,12px);
+  box-shadow: 0 20px 48px rgba(27,27,27,0.18);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 99999;
+  transform-origin: bottom right;
+}
+
+#jr-chatbot-panel.open{ opacity: 1; transform: translateY(0) scale(1); }
+
+#jr-chatbot-panel .panel-header{ padding: 14px 14px; border-bottom:1px solid #f0eaea; display:flex; align-items:center }
+#jr-chatbot-panel .panel-title{ margin:0; font-size:1rem; color:var(--jr-accent, #3e2723); font-weight:700 }
+#jr-chatbot-panel .panel-header button{ margin-left:auto; background:transparent; border:0; color:var(--jr-muted,#6b5a55); cursor:pointer }
+
+#jr-chatbot-panel .panel-body{ padding:12px; display:flex; flex-direction:column; gap:12px; flex:1 1 auto; overflow:auto }
+
+#jr-chatbot-panel .search-wrap{ padding:0 }
+#jr-chatbot-panel #jr-chat-search{ width:100%; padding:10px 44px 10px 12px; border:1px solid #e6dfdb; border-radius:8px }
+#jr-chatbot-panel #jr-chat-search-btn{ position:absolute; right:6px; top:50%; transform:translateY(-50%); border:none; background:transparent; cursor:pointer }
+
+#jr-chatbot-panel .suggestions{ list-style:none; margin:6px 0 0 0; padding:0; max-height:150px; overflow:auto }
+#jr-chatbot-panel .suggestions li{ padding:8px 10px; border-radius:8px; cursor:pointer; color:var(--jr-accent,#3e2723); background:transparent }
+#jr-chatbot-panel .suggestions li:hover{ background:#f8f4f3 }
+
+/* Layout: stack categories and answers vertically (answers appear below categories) */
+#jr-chatbot-panel .chat-content{ display:flex; flex-direction:column; gap:12px; align-items:stretch }
+#jr-chatbot-panel .categories{ width:100%; min-width:0; overflow:auto }
+#jr-chatbot-panel .answer-pane{ width:100%; min-width:0; padding:14px; border-top:1px solid #f1e9e6; background:#ffffff; border-radius:8px; box-shadow:0 6px 18px rgba(15,23,25,0.04); display:block }
+
+#jr-chatbot-panel .category{ margin-bottom:12px }
+#jr-chatbot-panel .category h4{ margin:0 0 8px 0; font-size:14px; color:var(--jr-accent,#3e2723); font-weight:700 }
+#jr-chatbot-panel .q-item{ padding:10px 12px; border-radius:10px; cursor:pointer; background:linear-gradient(180deg,#fff,#fff); border:1px solid #f3eae7; color:#2f2f2f; margin-bottom:8px; transition: all .12s ease }
+#jr-chatbot-panel .q-item:hover{ background:#fffaf8; transform:translateY(-2px); box-shadow:0 6px 18px rgba(15,23,25,0.04) }
+
+#jr-chatbot-panel .answer-question{ font-weight:700; margin-bottom:10px; color:var(--jr-accent,#3e2723); font-size:15px }
+#jr-chatbot-panel .answer-text{ color:#333; line-height:1.6; font-size:14px }
+#jr-chatbot-panel .escalation{ margin-top:12px; padding:12px; border-radius:8px; background:#fff4f2; color:#7a2d2d; border:1px solid #ffd6d1 }
+
+/* Inline answer inserted below a clicked question/suggestion */
+#jr-chatbot-panel .inline-answer{
+  margin-top:8px;
+  padding:12px;
+  border-radius:10px;
+  background: linear-gradient(180deg,#ffffff,#fffaf8);
+  border: 1px solid #f3e9e6;
+  box-shadow: 0 8px 22px rgba(15,23,25,0.06);
+}
+
+#jr-chatbot-panel .inline-answer .answer-question{ margin-bottom:8px }
+#jr-chatbot-panel .inline-answer .answer-text{ font-size:13.5px }
+
+/* Small responsive override for our ID-panel */
+@media (max-width:480px){
+  #jr-chatbot-panel{ right:12px; left:12px; width:auto; bottom:18px; height:60vh; max-height:calc(100vh - 110px) }
+  #jr-chatbot-toggle{ right:12px; bottom:12px }
+  #jr-chatbot-panel .chat-content{ flex-direction:column }
+  #jr-chatbot-panel .answer-pane{ border-left:none; border-top:1px solid #f1e9e6; padding-top:12px }
+}
+
+/* Strong visibility override for the toggle and its image/fallback.
+   This helps when global/project CSS accidentally hides the widget. */
+#jr-chatbot-toggle {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  width: 60px !important;
+  height: 60px !important;
+  right: 20px !important;
+  bottom: 20px !important;
+  z-index: 2147483647 !important; /* maximum safe z-index to avoid covering */
+}
+
+#jr-chat-toggle-img, #jr-chatbot-toggle img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+}
+
+#jr-chat-fallback {
+  display: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 56px !important;
+  height: 56px !important;
+  z-index: 2147483646 !important;
+}
+
+/* If an overlay with pointer-events:none is covering, ensure toggle still receives clicks */
+#jr-chatbot-toggle { pointer-events: auto !important; }
+
+/* Ensure the panel respects the hidden attribute (force it to be removed from layout when hidden) */
+#jr-chatbot-panel[hidden] {
+  display: none !important;
+}

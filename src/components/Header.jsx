@@ -64,7 +64,11 @@ function Header({ cartCount = 0, wishlistCount = 0, currentUser }) {
         )}
         {showSearch && (
           <div className="search-overlay">
-            <form onSubmit={handleSearchSubmit} className="search-overlay-form">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="search-overlay-form"
+              style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', flexWrap: 'nowrap' }}
+            >
               <label htmlFor="header-search" className="visually-hidden">Search</label>
               <input
                 id="header-search"
@@ -75,12 +79,13 @@ function Header({ cartCount = 0, wishlistCount = 0, currentUser }) {
                 placeholder="Search"
                 value={localSearch}
                 onChange={e => setLocalSearch(e.target.value)}
+                style={{ flex: '1 1 auto', minWidth: 0 }}
                 autoComplete="off"
               />
-              <button type="submit" className="search-overlay-icon-btn" aria-label="Search">
+              <button type="submit" className="search-overlay-icon-btn" aria-label="Search" style={{ flex: '0 0 auto' }}>
                 <FaSearch />
               </button>
-              <button type="button" className="search-overlay-close" aria-label="Close search" onClick={() => setShowSearch(false)}>
+              <button type="button" className="search-overlay-close" aria-label="Close search" onClick={() => setShowSearch(false)} style={{ flex: '0 0 auto' }}>
                 &#10005;
               </button>
             </form>

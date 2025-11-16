@@ -1,0 +1,35 @@
+/* Global base styles to prevent unexpected horizontal overflow on mobile
+	 - Use border-box so padding/border are included in width calculations
+	 - Reset body margin and ensure no horizontal overflow on small screens
+*/
+
+/* 1) Make box-sizing predictable across all elements */
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+/* Basic page reset */
+html, body, #root {
+	height: 100%;
+}
+body {
+	margin: 0;
+	padding: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* 2) Mobile safety: hide any accidental horizontal overflow on narrow viewports */
+@media (max-width: 768px) {
+	/* This prevents elements (like 100vw items, large images, or negative margins)
+		 from producing a horizontal scroll — safer than trying to patch each component */
+	body {
+		overflow-x: hidden;
+	}
+}
+
+/* Optional: ensure images and media don't exceed their containers */
+img, video, iframe {
+	max-width: 100%;
+	height: auto;
+}

@@ -21,7 +21,7 @@ function Banner() {
   };
 
   const handleBannerClick = () => {
-    navigate('/products');
+    navigate('/products-sidebar');
   };
 
   return (

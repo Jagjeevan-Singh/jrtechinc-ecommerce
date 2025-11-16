@@ -1,0 +1,52 @@
+/* Modern, elevated pay button for checkout */
+.checkout-btn {
+  --accent-1: #8C5230; /* brand brown */
+  --accent-2: #E5C593; /* warm gold */
+  --glass: rgba(255,255,255,0.06);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(135deg, var(--accent-1) 0%, #B06E4A 45%, var(--accent-2) 100%);
+  box-shadow: 0 8px 20px rgba(140,82,48,0.18), inset 0 -2px 6px rgba(0,0,0,0.12);
+  font-weight: 700;
+  font-size: 1.02rem;
+  letter-spacing: 0.2px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.checkout-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 14px 30px rgba(140,82,48,0.22), inset 0 -2px 8px rgba(0,0,0,0.14);
+}
+
+.checkout-btn:active:not(:disabled) {
+  transform: translateY(-1px) scale(0.997);
+}
+
+.checkout-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.15) saturate(0.85);
+}
+
+/* Price pill on the right (optional if markup added later) */
+.checkout-btn .price {
+  background: rgba(255,255,255,0.08);
+  padding: 6px 10px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.98rem;
+}
+
+/* Small screen tweaks */
+@media (max-width: 480px) {
+  .checkout-btn { padding: 10px 14px; font-size: 0.98rem; border-radius: 10px; }
+  .checkout-btn .price { padding: 5px 8px; font-size: 0.95rem; }
+}

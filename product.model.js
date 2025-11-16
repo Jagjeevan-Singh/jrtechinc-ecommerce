@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 // --- SUB-SCHEMAS ---
 
@@ -148,6 +148,18 @@ const ShippingAddressSchema = new mongoose.Schema({
     zip: { type: String, required: true },
 });
 
+// New structured delivery address requested by the UI/UX team. Keep the
+// existing `shipping` schema for backward compatibility but add
+// `DeliveryAddressSchema` and store it on orders as `deliveryAddress`.
+const DeliveryAddressSchema = new mongoose.Schema({
+    fullName: { type: String, required: false, trim: true },
+    phone: { type: String, required: false, trim: true },
+    street: { type: String, required: false },
+    city: { type: String, required: false },
+    state: { type: String, required: false },
+    postalCode: { type: String, required: false },
+});
+
 const OrderItemSchema = new mongoose.Schema({
     productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     variantSku: { type: String, required: true },
@@ -158,27 +170,44 @@ const OrderItemSchema = new mongoose.Schema({
 });
 
 const OrderSchema = new mongoose.Schema({
-    userId: { type: String, required: true },
-    items: [OrderItemSchema],
-    totalAmount: { type: Number, required: true, min: 0 },
+  userId: { type: String, required: false },
 
-    shipping: { type: ShippingAddressSchema, required: true }, 
+  // ✅ NEW FIELDS for Razorpay Integration
+  orderId: { type: String, required: false },   // Razorpay Order ID
+  paymentId: { type: String, required: false }, // Razorpay Payment ID
+  userEmail: { type: String, required: false }, // Customer Email
+  status: { type: String, default: "pending" }, // Payment Status (Our custom status)
 
-    // Enhanced Payment Tracking
-    paymentStatus: {
-        type: String,
-        enum: ['Pending', 'Paid', 'Failed', 'Successful After Retry'],
-        default: 'Pending'
-    },
-    paymentEvents: [PaymentEventSchema],
+  items: [OrderItemSchema],
+  totalAmount: { type: Number, required: false, min: 0 },
 
-    orderStatus: { type: String, enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], default: 'Processing' },
+    // legacy shipping snapshot (kept for backwards compatibility)
+    shipping: { type: ShippingAddressSchema, required: false },
+
+    // Preferred structured delivery address used by the checkout form/UI.
+    // This is optional to preserve existing orders created before this change.
+    deliveryAddress: { type: DeliveryAddressSchema, required: false },
+
+  // Razorpay Payment Tracking
+  paymentStatus: {
+    type: String,
+    enum: ['Pending', 'Paid', 'Failed', 'Successful After Retry'],
+    default: 'Pending'
+  },
+  paymentEvents: [PaymentEventSchema],
+
+  orderStatus: { 
+    type: String, 
+    enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], 
+    default: 'Processing' 
+  }
 }, { timestamps: true });
 
 
-// Create Models
-const Product = mongoose.model('Product', ProductSchema);
-const Cart = mongoose.model('Cart', CartSchema);
-const Order = mongoose.model('Order', OrderSchema);
 
-module.exports = { Product, Cart, Order };
+// Create Models
+const Product = mongoose.models.Product || mongoose.model('Product', ProductSchema);
+const Cart = mongoose.models.Cart || mongoose.model('Cart', CartSchema);
+const Order = mongoose.models.Order || mongoose.model('Order', OrderSchema);
+
+export { Product, Cart, Order };

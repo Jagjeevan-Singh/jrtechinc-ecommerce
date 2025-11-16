@@ -23,7 +23,7 @@ function ProductImage({ src, alt, ...props }) {
 
 import { useParams, useLocation } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
-import { FaPlus, FaMinus, FaShareAlt, FaCheckCircle } from 'react-icons/fa';
+import { FaPlus, FaMinus, FaShareAlt, FaCheckCircle, FaCartPlus, FaHeart, FaWhatsapp } from 'react-icons/fa';
 import './ProductLanding.css';
 import ProductRating2 from '../pages/ProductRating2';
 import CustomerReviewSummary from './CustomerReviewSummary';
@@ -150,6 +150,12 @@ function ProductLanding({ products, onAddToCart, onAddToWishlist }) {
                                     setZoomPos({ x, y });
                                 }}
                             />
+                            {/* Reflection/mirror element uses the same image URL as a background so we can flip/blur it */}
+                            <div
+                                className="image-reflection"
+                                style={{ backgroundImage: `url(${primaryImageSource})` }}
+                                aria-hidden="true"
+                            />
                             {showZoom && imgRef.current && (
                                 <div 
                                     className="image-zoom-lens" 
@@ -174,7 +180,7 @@ function ProductLanding({ products, onAddToCart, onAddToWishlist }) {
 
                     {/* Right Column: Product Details (Shorter content area) */}
                     <div className="product-details">
-                        <h1 className="product-title">{product.name}</h1>
+                        <h1 className="product-title product-landing-title">{product.name}</h1>
                         <p className="product-brand">{product.brand || product.category}</p>
                         
                         <div className="product-rating-row">
@@ -188,7 +194,15 @@ function ProductLanding({ products, onAddToCart, onAddToWishlist }) {
                         <div className="product-price-info">
                             <span className="current-price">₹{finalPrice.toFixed(2)}</span>
                             {finalMRP > finalPrice && (
-                                <span className="original-price-strike">₹{finalMRP.toFixed(2)}</span>
+                                (() => {
+                                    const discountPct = finalMRP && finalMRP > finalPrice ? Math.round(((finalMRP - finalPrice) / finalMRP) * 100) : 0;
+                                    return (
+                                        <>
+                                            <span className="original-price-strike">₹{finalMRP.toFixed(2)}</span>
+                                            {discountPct > 0 && <span className="discount-pct">-{discountPct}%</span>}
+                                        </>
+                                    );
+                                })()
                             )}
                         </div>
                         
@@ -255,11 +269,18 @@ function ProductLanding({ products, onAddToCart, onAddToWishlist }) {
                                 onClick={() => onAddToCart({ ...product, selectedVariant: selectedVariant, quantity: quantity })} 
                                 disabled={isOutOfStock || quantity === 0}
                             >
-                                Add to Cart
+                                <FaCartPlus style={{ marginRight: 8 }} /> Add to Cart
                             </button>
                             <button className="add-to-wishlist-btn" onClick={() => onAddToWishlist(product)} disabled={isOutOfStock}>
-                                Add to Wishlist
+                                <FaHeart style={{ marginRight: 8 }} /> Add to Wishlist
                             </button>
+                        </div>
+
+                        {/* Bulk enquiry via WhatsApp */}
+                        <div className="bulk-enquiry-wrap">
+                            <a className="bulk-enquiry-btn" href="https://wa.me/918527914649" target="_blank" rel="noopener noreferrer">
+                                <FaWhatsapp style={{ marginRight: 8 }} /> For Bulk Enquiry
+                            </a>
                         </div>
                         
                         {/* --- 3. MAIN DESCRIPTION (MOVED HERE TO SCROLL WITH RIGHT COLUMN) --- */}

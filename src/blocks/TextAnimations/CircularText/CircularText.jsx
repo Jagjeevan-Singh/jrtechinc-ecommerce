@@ -1,108 +1,56 @@
-import { useEffect } from "react";
-import { motion, useAnimation, useMotionValue } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import "./CircularText.css";
 
-const getRotationTransition = (duration, from, loop = true) => ({
-  from,
-  to: from + 360,
-  ease: "linear",
-  duration,
-  type: "tween",
-  repeat: loop ? Infinity : 0,
-});
-
-const getTransition = (duration, from) => ({
-  rotate: getRotationTransition(duration, from),
-  scale: {
-    type: "spring",
-    damping: 20,
-    stiffness: 300,
-  },
-});
-
-const CircularText = ({
-  text,
-  spinDuration = 20,
-  onHover = "speedUp",
-  className = "",
-}) => {
-  const letters = Array.from(text);
-  const controls = useAnimation();
-  const rotation = useMotionValue(0);
+const CircularText = ({ text, spinDuration = 20, onHover = "speedUp", className = "" }) => {
+  // Normalize spaces: collapse runs of whitespace to a single normal space,
+  // ensure there is a star at both ends (so the ring shows a separator on both ends),
+  // then replace regular space with a thin space so words remain separated but
+  // don't create a large empty gap on the circle.
+  // Collapse whitespace and trim.
+  let normalized = (text || "").replace(/\s+/g, ' ').trim();
+  // Remove any existing star characters at the ends to avoid duplicates (handles '*' and '★'),
+  // then add a single decorative star at each end.
+  normalized = normalized.replace(/^[*★\s]+|[*★\s]+$/g, '');
+  normalized = `★ ${normalized} ★`;
+  // Replace regular spaces with a thin space (U+2009) to reduce large gaps
+  const letters = Array.from(normalized).map((ch) => (ch === ' ' ? '\u2009' : ch));
+  // spacing multiplier (1.0 = natural evenly distributed). Keep tight by default.
+  const spacingMultiplier = 1.0;
+  const containerRef = useRef(null);
+  const [radius, setRadius] = useState(0);
 
   useEffect(() => {
-    const start = rotation.get();
-    controls.start({
-      rotate: start + 360,
-      scale: 1,
-      transition: getTransition(spinDuration, start),
-    });
-  }, [spinDuration, text, onHover, controls, rotation]);
-
-  const handleHoverStart = () => {
-    const start = rotation.get();
-    if (!onHover) return;
-    let transitionConfig;
-    let scaleVal = 1;
-    switch (onHover) {
-      case "slowDown":
-        transitionConfig = getTransition(spinDuration * 2, start);
-        break;
-      case "speedUp":
-        transitionConfig = getTransition(spinDuration / 4, start);
-        break;
-      case "pause":
-        transitionConfig = {
-          rotate: { type: "spring", damping: 20, stiffness: 300 },
-          scale: { type: "spring", damping: 20, stiffness: 300 },
-        };
-        scaleVal = 1;
-        break;
-      case "goBonkers":
-        transitionConfig = getTransition(spinDuration / 20, start);
-        scaleVal = 0.8;
-        break;
-      default:
-        transitionConfig = getTransition(spinDuration, start);
+    function measure() {
+      const el = containerRef.current;
+      if (!el) return;
+  const size = el.offsetWidth || el.clientWidth || 64;
+  // radius: slightly smaller than before so letters sit closer to the logo
+  // reduce the gap from +8 to +2 to make the ring tighter
+  setRadius(Math.max(12, Math.round(size / 2) + 2));
     }
-    controls.start({
-      rotate: start + 360,
-      scale: scaleVal,
-      transition: transitionConfig,
-    });
-  };
-
-  const handleHoverEnd = () => {
-    const start = rotation.get();
-    controls.start({
-      rotate: start + 360,
-      scale: 1,
-      transition: getTransition(spinDuration, start),
-    });
-  };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   return (
-    <motion.div
-      className={`circular-text ${className}`}
-      style={{ rotate: rotation }}
-      initial={{ rotate: 0 }}
-      animate={controls}
-      onMouseEnter={handleHoverStart}
-      onMouseLeave={handleHoverEnd}
-    >
-      {letters.map((letter, i) => {
-        const rotationDeg = (360 / letters.length) * i;
-        const factor = Math.PI / letters.length;
-        const x = factor * i;
-        const y = factor * i;
-        const transform = `rotateZ(${rotationDeg}deg) translate3d(${x}px, ${y}px, 0)`;
-        return (
-          <span key={i} style={{ transform, WebkitTransform: transform }}>
-            {letter}
-          </span>
-        );
-      })}
-    </motion.div>
+    <div ref={containerRef} className={`circular-text ${className}`}>
+      <div className="circular-rotator" style={{ animationDuration: `${spinDuration}s` }}>
+        {letters.map((letter, i) => {
+          const baseAngle = (360 / Math.max(1, letters.length)) * i;
+          const rotationDeg = baseAngle * spacingMultiplier;
+          const isStar = letters[i] === '★' || letters[i] === '*';
+          // push stars slightly outward so they sit between the phrases
+          const starOffset = isStar ? radius + 8 : radius;
+          const transform = `rotate(${rotationDeg}deg) translateY(-${starOffset}px)`;
+          return (
+            <span key={i} className={isStar ? 'star' : ''} style={{ transform, WebkitTransform: transform }}>
+              {letters[i]}
+            </span>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 

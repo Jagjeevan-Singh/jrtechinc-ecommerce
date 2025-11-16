@@ -1,0 +1,184 @@
+/* src/pages/OrderSuccess.css */
+.order-success-root {
+  margin-top: 100px; /* requested top margin */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.order-success-card {
+  width: 100%;
+  max-width: 880px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
+  border-radius: 14px;
+  box-shadow: 0 12px 36px rgba(10,12,16,0.08);
+  padding: 28px;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.order-success-illustration {
+  flex: 0 0 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #e6f7ef, #ffffff 40%), linear-gradient(135deg,#7bd389,#4bb07a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 -6px 20px rgba(0,0,0,0.06);
+}
+
+.order-success-illustration svg {
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 6px 12px rgba(64,128,90,0.12));
+}
+
+.order-success-content {
+  flex: 1 1 auto;
+}
+
+.order-success-title {
+  font-size: 28px;
+  margin: 0 0 8px 0;
+  color: #103522;
+  font-weight: 700;
+}
+
+.order-success-subtitle {
+  margin: 0 0 18px 0;
+  color: #55605a;
+  font-size: 15px;
+}
+
+.order-details {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 18px;
+  border: 1px solid #f0eee9;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+/* make side/aside boxes look card-like and separated */
+.order-details aside, .order-details { box-shadow: 0 8px 24px rgba(16,20,24,0.04); }
+
+.order-id-label { color: #7a857b; font-size: 13px; }
+.order-id-value { font-weight: 600; color: #103522; font-size: 15px; }
+
+.order-success-actions { display:flex; gap:12px; }
+.btn { padding: 10px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight:600; }
+.btn-primary { background: linear-gradient(90deg,#8c5230,#6f3f2a); color: #fff; }
+.btn-outline { background: transparent; border: 1px solid #e6e2dc; color: #2b2b2b; }
+
+/* Small button variant used in OrderDetails for compact actions */
+.small-btn { padding: 6px 10px; font-size: 13px; border-radius: 6px; }
+
+/* Modern action row for OrderDetails */
+.order-action-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+}
+
+/* Primary/back button modernized */
+.btn-primary {
+  background: linear-gradient(180deg, #8C5230 0%, #6f3f2a 100%);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(140,82,48,0.12);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(140,82,48,0.16); }
+
+/* Danger/cancel button */
+.btn-danger {
+  background: linear-gradient(180deg,#ff5560,#e33b48);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 8px 20px rgba(227,59,72,0.10);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.btn-danger:hover:not(:disabled) { transform: translateY(-3px); filter: brightness(1.02); box-shadow: 0 14px 30px rgba(227,59,72,0.18); }
+.btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Secondary outline (for download invoice etc) */
+.btn-outline-modern {
+  background: transparent;
+  border: 1px solid #e6e2dc;
+  color: #2b2b2b;
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+
+/* Responsive: on small screens stack actions full width */
+@media (max-width: 720px) {
+  .order-action-row { flex-direction: column-reverse; gap: 10px; align-items: stretch; justify-content: center; }
+  .order-action-row .btn, .order-action-row .btn-danger, .order-action-row .btn-primary, .order-action-row .btn-outline-modern { width: 100%; }
+}
+
+/* Order details specific */
+.order-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(180deg,#fff,#fbfbfb);
+  border: 1px solid #f0eee9;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.order-item img { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; }
+.order-item-info { flex: 1; }
+.order-item-name { font-weight: 700; color: #103522; margin-bottom: 6px; }
+.order-item-meta { color: #6b6f6a; font-size: 13px; }
+
+.payment-events { margin-top: 12px; }
+.payment-event { display:flex; gap:12px; align-items:flex-start; padding:8px 0; border-bottom:1px dashed #eee; }
+.event-time { color: #8b8f8b; font-size: 13px; min-width:120px; }
+.event-details { flex:1; }
+
+/* Tidy up action row on wide screens: back button left, actions right */
+.order-action-row .left-actions { display:flex; gap:12px; align-items:center; }
+.order-action-row .right-actions { display:flex; gap:12px; align-items:center; }
+
+@media (min-width: 721px) {
+  .order-action-row { display:flex; }
+  .order-action-row .left-actions { order: 0; }
+  .order-action-row .right-actions { order: 1; }
+}
+
+.badge {
+  display: inline-block; padding:6px 10px; border-radius: 999px; font-weight:700; font-size:12px;
+}
+.badge-success { background: #e6faf0; color:#0b6b3b; border:1px solid #c9f0dc; }
+.badge-failed { background: #fff5f5; color:#8b1f1f; border:1px solid #f2dede; }
+.badge-pending { background: #fffaf0; color:#7a5b2d; border:1px solid #f5ead4; }
+
+@media (max-width: 720px) {
+  .order-success-card { flex-direction: column; align-items: center; text-align: center; }
+  .order-success-illustration { margin-bottom: 8px; }
+  .order-success-content { width:100%; }
+  .order-success-actions { justify-content: center; }
+}
+
+/* Responsive two-column layout used by OrderDetails */
+.order-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+}
+
+@media (max-width: 880px) {
+  .order-details-grid { grid-template-columns: 1fr; }
+}

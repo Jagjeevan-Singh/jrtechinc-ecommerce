@@ -15,3 +15,29 @@
   padding: 24px 0 24px 0;
   /* Remove margin-top so content replaces, not stacks below banner */
 }
+
+/* Mobile responsive adjustments (<=768px) */
+@media (max-width: 768px) {
+  /* Make the main content a single-column flex container for stacking */
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 12px;
+  }
+
+  /* Make any sidebar take full width on small screens */
+  /* NOTE: previously this applied to all elements with class `.sidebar` and
+     caused component sidebars (mobile nav) to expand to full width. Narrow
+     that behavior to page-level sidebars only. If a page-level sidebar
+     should become full-width on mobile, give it the class `page-sidebar`. */
+  .page-sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Tweak typography for mobile readability */
+  h1 { font-size: 1.8rem; }
+  p  { font-size: 1rem; }
+}

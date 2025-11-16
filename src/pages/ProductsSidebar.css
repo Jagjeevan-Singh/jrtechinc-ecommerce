@@ -1,0 +1,237 @@
+.ps-root{padding:22px;box-sizing:border-box;font-family:Inter,system-ui,Arial;background:#f5f7fb;margin-top:100px}
+.ps-header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.ps-back{background:#fff;border:1px solid #e6e6e6;padding:8px 12px;border-radius:8px;cursor:pointer}
+.ps-content{display:grid;grid-template-columns:320px 1fr;gap:24px}
+.ps-filters{background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);padding:18px;border-radius:12px;border:1px solid #eceff3;box-shadow:0 6px 18px rgba(30,40,50,0.04)}
+.ps-filter-box{margin-bottom:16px}
+.ps-filter-header h2{margin:0;font-size:18px;letter-spacing:0.2px;color:#12263f}
+.ps-filter-box h3{margin:12px 0 10px 0;font-size:13px;color:#374151}
+.ps-cats-vertical{display:flex;flex-direction:column;gap:8px}
+.ps-cat-line{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;color:#1f2937}
+.ps-cat-line input{width:16px;height:16px}
+.ps-cat-line:hover{background:#f1f5f9}
+.ps-cat-line.active,.ps-cat-line input:checked + .ps-cat-name{font-weight:700}
+.ps-cat-name{font-size:14px}
+.ps-price-slider input[type="range"]{width:100%;appearance:none;height:6px;border-radius:6px;background:linear-gradient(90deg,#06b6d4, #3b82f6)}
+.ps-price-row{display:flex;gap:8px;margin-top:8px}
+.ps-price-row input{flex:1;padding:8px;border:1px solid #e6eef8;border-radius:8px}
+.ps-price-slider{display:flex;flex-direction:column;gap:8px;max-width:100%;box-sizing:border-box}
+.ps-price-slider input[type="range"]{width:100%;appearance:none;height:6px;border-radius:6px;background:linear-gradient(90deg,#06b6d4, #3b82f6);box-sizing:border-box}
+.ps-price-row{display:flex;gap:8px;margin-top:8px;align-items:center}
+.ps-price-row input{flex:1;min-width:0;padding:6px 8px;border:1px solid #e6eef8;border-radius:8px;font-size:13px;box-sizing:border-box}
+.ps-price-note{font-size:12px;color:#6b7280;margin-top:6px;white-space:normal}
+.ps-filters{background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);padding:18px;border-radius:12px;border:1px solid #eceff3;box-shadow:0 6px 18px rgba(30,40,50,0.04)}
+.ps-filters{background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);padding:14px;border-radius:12px;border:1px solid #eceff3;box-shadow:0 6px 18px rgba(30,40,50,0.04);overflow:hidden}
+.ps-price-note{font-size:12px;color:#6b7280;margin-top:6px}
+.ps-ratings{display:flex;flex-direction:column;gap:8px}
+.ps-rating-line{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer}
+.ps-rating-line input{width:16px;height:16px}
+.ps-rating-line:hover{background:#f8fafc}
+.ps-rating-line.active{background:#eef2ff}
+.ps-rating-stars{display:inline-flex;align-items:center;gap:6px;color:#f59e0b}
+.ps-rating-stars .star{color:#f59e0b}
+.ps-rating-stars .and-above{color:#374151;font-size:13px;margin-left:6px}
+.ps-main{min-height:60vh}
+.ps-loading,.ps-error{padding:20px;background:#fff;border-radius:8px;border:1px solid #eee}
+.ps-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.ps-results-count{color:#374151}
+.ps-sort select{padding:8px;border-radius:8px;border:1px solid #e6eef8}
+.ps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.ps-card{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #eef2f7;cursor:pointer;display:flex;flex-direction:column;transition:transform .12s ease,box-shadow .12s ease}
+.ps-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(16,24,40,0.06)}
+.ps-image-wrap{background:linear-gradient(180deg,#fafbff 0%, #ffffff 100%);height:220px;display:flex;align-items:center;justify-content:center;position:relative}
+.ps-image-wrap img{max-width:95%;max-height:95%;object-fit:contain;display:block}
+
+/* Wishlist button positioned over the image */
+.ps-wishlist-btn{position:absolute;top:10px;right:10px;z-index:10;background:#ffffff;border:1px solid rgba(16,24,40,0.06);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 12px rgba(2,6,23,0.06);color:#6b7280}
+.ps-wishlist-btn svg{width:16px;height:16px}
+.ps-wishlist-btn.wishlisted{background:#fff;border-color:transparent;color:#ef4444}
+.ps-wishlist-btn.wishlisted svg{color:#ef4444}
+
+/* Discount percentage next to the original price */
+.ps-discount-pct{color:#10b981;font-weight:700;margin-left:6px;font-size:0.95rem}
+.ps-card-body{padding:14px;text-align:center}
+.ps-card-title{font-weight:700;margin-bottom:6px;font-size:1rem;line-height:1.2;min-height:2.6em}
+.ps-card-meta{color:#6b6f6a;font-size:13px;margin-bottom:8px}
+.ps-price{font-weight:800;color:#0f172a;display:flex;justify-content:center;align-items:center;gap:8px}
+.ps-price-discount{color:#e53935;font-weight:900;font-size:1.05rem}
+.ps-price-original{color:#6b7280;text-decoration:line-through;font-size:0.95rem}
+
+/* Add to cart button styling */
+.ps-actions{display:flex;justify-content:center;margin-top:10px;padding:0 10px;box-sizing:border-box}
+/* Make the add-to-cart button stretch almost full card width but keep small side padding */
+.ps-add-to-cart{background:#DC143C;color:#fff;border:none;padding:12px 18px;border-radius:10px;cursor:pointer;font-weight:800;box-shadow:0 6px 18px rgba(220,20,60,0.14);transition:transform .08s ease,box-shadow .12s ease;flex:1;max-width:100%;width:100%;box-sizing:border-box}
+.ps-add-to-cart:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(220,20,60,0.18)}
+.ps-add-to-cart:active{transform:translateY(0)}
+
+@media (max-width:900px){
+  .ps-content{grid-template-columns:1fr}
+  .ps-filters{display:none}
+  .ps-grid{grid-template-columns:repeat(2,1fr)}
+  .ps-image-wrap{height:160px}
+}
+
+/* Extra mobile tuning for narrow phones */
+@media (max-width:600px) {
+  .ps-root { padding: 12px; margin-top: 84px; }
+  .ps-header { margin-bottom: 12px; }
+  .ps-content { grid-template-columns: 1fr; gap: 12px; }
+  .ps-filters { display: none !important; }
+  .ps-main { width: 100% !important; }
+  /* Use two columns on most mobile phones so products appear side-by-side.
+    If the viewport is extremely narrow we'll fall back to single column below. */
+  .ps-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
+  .ps-image-wrap { height: 140px; }
+  .ps-card { border-radius: 10px; }
+  .ps-card-body { padding: 12px; }
+  .ps-card-title { font-size: 0.98rem; min-height: 2.2em; }
+  .ps-price-discount { font-size: 1rem; }
+  .ps-actions { padding: 0 6px; }
+  .ps-add-to-cart { padding: 12px; font-size: 0.95rem; }
+  .ps-filter-trigger { display: inline-flex; }
+}
+
+/* Ensure the filter trigger is visible and accessible on mobile: pin it
+   just below the site header so users can always open filters. */
+@media (max-width: 768px) {
+  .ps-filter-trigger {
+    display: inline-flex !important;
+    position: fixed !important;
+    top: 150px !important; /* adjust if your site header is taller */
+    right: 12px !important;
+    z-index: 2200 !important;
+    box-shadow: 0 6px 14px rgba(2,6,23,0.12);
+  }
+}
+
+/* Extremely small phones use single column for readability */
+@media (max-width: 360px) {
+  .ps-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .ps-filter-trigger { top: calc(var(--ps-controls-offset) - 20px) !important; }
+}
+
+@media (max-width:420px) {
+  .ps-root { padding: 8px; margin-top: 72px; }
+  .ps-image-wrap { height: 120px; }
+  .ps-links-button, .ps-filter-trigger { font-size: 0.9rem; padding: 8px 10px; }
+  .ps-card-title { font-size: 0.95rem; }
+  .ps-card-body { padding: 10px; }
+  .ps-add-to-cart { width: 100%; padding: 10px; }
+}
+
+/* If compact filters (icon bar) are used, ensure main adjusts on very narrow screens */
+@media (max-width: 768px) {
+  .ps-content.compact-filters { grid-template-columns: 48px 1fr; }
+  .ps-main { width: calc(100% - 48px); }
+}
+
+/* Compact sidebar behavior on small mobile screens: make filters a narrow icon bar */
+@media (max-width: 768px) {
+  /* For most phones we prefer to hide the left filters and surface the
+     filter trigger (overlay) so product cards get full available width. */
+  .ps-content { grid-template-columns: 1fr !important; gap: 12px; }
+  .ps-filters { display: none !important; width: 0 !important; max-width: 0 !important; overflow: hidden !important; padding: 0 !important; }
+  .ps-main { width: 100% !important; }
+  /* Make the grid two columns on narrow tablets / larger phones (601-768px).
+     Very small phones (<=600px) use the 1-column rules defined earlier. */
+}
+
+@media (min-width: 601px) and (max-width: 768px) {
+  .ps-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+}
+
+@media (max-width: 768px) {
+  /* Continue mobile header and trigger visibility rules */
+  .ps-filter-trigger { display: inline-flex !important; }
+  .ps-filter-trigger { display: inline-flex !important; }
+  /* Sticky header so filter trigger stays visible during scroll */
+  .ps-header { position: sticky; top: 150px; z-index: 1250; background: transparent; display:flex; justify-content:space-between; align-items:center; padding-top:6px; padding-bottom:6px; }
+}
+
+/* Mobile spacing and visibility tweaks */
+@media (max-width: 768px) {
+  /* Add extra top padding so page content sits below the fixed site header */
+  .ps-root {
+    padding-top: 150px !important;
+    margin-top: 0px !important;
+  }
+
+  /* Make sure the filter trigger is clearly visible and accessible. Place
+     it on the LEFT side of the screen for easier thumb reach on mobile. */
+  .ps-filter-trigger {
+    display: inline-flex !important;
+    position: fixed !important;
+  top: 150px !important; /* tweak this if your header height differs */
+    left: 12px !important;
+    right: auto !important;
+    z-index: 2500 !important;
+    background: #0ea5a4 !important;
+    color: #fff !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 20px rgba(2,6,23,0.12) !important;
+  }
+
+  /* Show a compact sort control on the right side of mobile so users can
+     change ordering without scrolling to the top. We reuse the existing
+     .ps-sort select but make it compact and fixed on mobile. */
+  .ps-sort {
+    display: inline-flex !important;
+    position: fixed !important;
+  top: 150px !important;
+    right: 12px !important;
+    left: auto !important;
+    z-index: 2450 !important;
+    background: transparent !important;
+  }
+  .ps-sort select { padding: 6px 10px !important; font-size: 0.95rem !important; border-radius: 8px !important; }
+
+  /* Slightly reduce product title font on mobile for better fit */
+  .ps-card-title {
+    font-size: 0.95rem !important;
+    min-height: 2.2em !important;
+  }
+}
+
+/* Mobile filter overlay and header trigger */
+.ps-filter-trigger{display:none;background:#0ea5a4;color:#fff;border:none;padding:8px 12px;border-radius:8px;margin-left:auto}
+.ps-header-actions{margin-left:auto}
+@media (max-width:900px){
+  .ps-filter-trigger{display:inline-flex;align-items:center;gap:8px}
+  .ps-header{align-items:center}
+  .ps-header h1{font-size:18px}
+  .ps-mobile-filters-overlay{position:fixed;inset:0;background:rgba(8,15,25,0.5);z-index:1200;display:flex;align-items:flex-start;justify-content:center;padding:20px}
+  .ps-mobile-filters{background:#fff;border-radius:12px;width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:18px;box-shadow:0 12px 30px rgba(2,6,23,0.4)}
+    .ps-mobile-filters{margin-top:var(--ps-controls-offset);max-height:calc(90vh - var(--ps-controls-offset))}
+  .ps-apply-bar{position:sticky;bottom:0;display:flex;gap:8px;justify-content:flex-end;padding:12px 0;background:linear-gradient(180deg, rgba(255,255,255,0), #fff);margin-top:12px}
+  .ps-apply-btn{background:#2563eb;color:#fff;border:none;padding:10px 14px;border-radius:8px}
+  .ps-clear-btn{background:transparent;border:1px solid #d1d5db;padding:10px 14px;border-radius:8px}
+}
+
+/* Ensure filter and sort controls remain fixed on mobile at the controls offset.
+   Do NOT change existing page padding/margins — we only pin the controls. */
+:root { --ps-controls-offset: 150px; }
+@media (max-width: 900px) {
+  .ps-filter-trigger, .ps-sort {
+    position: fixed !important;
+    top: var(--ps-controls-offset) !important;
+    z-index: 3000 !important;
+  }
+  /* Keep the left/right placement that was previously set */
+  .ps-filter-trigger { left: 12px !important; right: auto !important; }
+  .ps-sort { right: 12px !important; left: auto !important; }
+}
+
+/* Final override: force the controls to be fixed and remove any transform that
+   could make fixed positioning behave unexpectedly. This is intentionally
+   highly specific and global so it wins over other stylesheet rules. */
+html body .ps-filter-trigger,
+html body .ps-sort {
+  position: fixed !important;
+  top: var(--ps-controls-offset) !important;
+  z-index: 9999 !important;
+  transform: none !important;
+  will-change: auto !important;
+}
+html body .ps-filter-trigger { left: 12px !important; right: auto !important; }
+html body .ps-sort { right: 12px !important; left: auto !important; }

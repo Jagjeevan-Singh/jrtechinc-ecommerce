@@ -62,8 +62,10 @@ const Home = () => {
                         }`}
                         key={index}
                     >
-                        {/* Adding a Link around the banner is common for promotions */}
-                        <img src={img} alt={`Banner ${index + 1}`} />
+                                                {/* Adding a Link around the banner is common for promotions */}
+                                                <Link to="/products-sidebar">
+                                                    <img src={img} alt={`Banner ${index + 1}`} style={{cursor: 'pointer'}} />
+                                                </Link>
                     </div>
                 ))}
             </div>

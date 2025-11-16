@@ -27,3 +27,26 @@
   font-size: 40px;
   color: white;
 }
+
+/* Mobile adjustments for banner and controls */
+@media (max-width: 768px) {
+  .banner-image {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important; /* avoid cropping */
+    /* add top margin so header does not overlap the banner on mobile */
+    margin-top: 84px !important;
+    top: 0 !important;
+    max-height: none;
+  }
+  /* Reduce arrow/button sizes for touch screens */
+  .slick-prev, .slick-next { width: 36px; height: 36px; }
+  .slick-prev:before, .slick-next:before { font-size: 24px; }
+
+  /* If there are any overlaid CTA buttons inside banners, make them smaller */
+  .banner-slider .cta, .banner-cta, .hero-cta {
+    font-size: 0.9rem !important;
+    padding: 8px 10px !important;
+    border-radius: 6px !important;
+  }
+}

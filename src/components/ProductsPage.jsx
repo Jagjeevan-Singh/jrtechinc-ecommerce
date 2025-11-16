@@ -11,7 +11,7 @@ function ProductImage({ src, alt, ...props }) {
     return <img src={src} alt={alt} {...props} />;
 }
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaCartPlus, FaHeart } from 'react-icons/fa';
 import ProductRating2 from '../pages/ProductRating2'; // Corrected import path
@@ -26,6 +26,9 @@ function ProductsPage({ products, onAdd, onWishlist, searchTerm = '', setSearchT
     useEffect(() => {
         prevPathRef.current = location.pathname;
     }, [location.pathname]);
+
+    // Local optimistic wishlist state so UI toggles immediately
+    const [localWishlist, setLocalWishlist] = useState(() => new Set());
 
     // Only clear search term if navigating away from /products
     useEffect(() => {
@@ -71,6 +74,10 @@ function ProductsPage({ products, onAdd, onWishlist, searchTerm = '', setSearchT
                     <div style={{ gridColumn: '1/-1', color: '#888', fontSize: '1.2rem', padding: '2rem', textAlign: 'center' }}>
                         No products available. Add a product via the Postman API!
                     </div>
+                ) : filteredProducts.length === 0 ? (
+                    <div style={{ gridColumn: '1/-1', color: '#888', fontSize: '1.2rem', padding: '2rem', textAlign: 'center' }}>
+                        No products found for "{searchTerm}".
+                    </div>
                 ) : (
                 /* --- Render Live Products --- */
                 filteredProducts.map((product) => (
@@ -80,10 +87,22 @@ function ProductsPage({ products, onAdd, onWishlist, searchTerm = '', setSearchT
                     >
                         {/* --- WISHILIST ICON BUTTON (Fixed) --- */}
                         <button
-                            className={`wishlist-icon-btn${product.isWishlisted ? ' wishlisted' : ''}`}
-                            // CRITICAL FIX: Stop propagation to prevent card navigation
-                            onClick={(e) => { e.stopPropagation(); e.preventDefault(); onWishlist(product); }}
-                            aria-label="Add to wishlist"
+                            className={`wishlist-icon-btn${(product.isWishlisted || localWishlist.has(product.id)) ? ' wishlisted' : ''}`}
+                            // Stop propagation to prevent card navigation
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                // Optimistic toggle locally
+                                setLocalWishlist(prev => {
+                                    const next = new Set(Array.from(prev));
+                                    if (next.has(product.id)) next.delete(product.id);
+                                    else next.add(product.id);
+                                    return next;
+                                });
+                                // Notify parent to persist/toggle server-side
+                                if (onWishlist) onWishlist(product);
+                            }}
+                            aria-label="Toggle wishlist"
                             style={{ position: 'absolute', top: 14, right: 14, background: 'none', border: 'none', zIndex: 3, cursor: 'pointer', padding: 4 }}
                         >
                             <FaHeart />
@@ -99,20 +118,29 @@ function ProductsPage({ products, onAdd, onWishlist, searchTerm = '', setSearchT
                         <h3 onClick={() => handleProductClick(product)}>{product.name}</h3>
                         <ProductRating2 avg={product.averageRating || 0} count={product.reviewCount || 0} />
                         
-                        <p className="price">
-                            ₹{product.discountedPrice || product.price || 'N/A'} 
-                            
-                            {product.mrp && product.mrp > product.discountedPrice && (
-                                <span className="original-price">₹{product.mrp}</span>
-                            )}
-                        </p>
+                        {(() => {
+                            const mrp = Number(product.mrp || 0);
+                            const dp = Number(product.discountedPrice || product.price || mrp || 0);
+                            const pct = mrp && mrp > dp ? Math.round(((mrp - dp) / mrp) * 100) : 0;
+                            return (
+                                <p className="price">
+                                    <span className="price-discount">₹{dp}</span>
+                                    {mrp && mrp > dp && (
+                                        <>
+                                            <span className="original-price">₹{mrp}</span>
+                                            {pct > 0 && <span className="discount-pct">-{pct}%</span>}
+                                        </>
+                                    )}
+                                </p>
+                            );
+                        })()}
                         <div className="product-actions">
                             {/* --- ADD TO CART BUTTON (Fixed) --- */}
                             <button 
                                 // CRITICAL FIX: Stop propagation to prevent card navigation
                                 onClick={(e) => { e.stopPropagation(); e.preventDefault(); onAdd(product); }}
                             >
-                                <FaCartPlus /> Add to Cart
+                                Add to Cart
                             </button>
                         </div>
                     </div>

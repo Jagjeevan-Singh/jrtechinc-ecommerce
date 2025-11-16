@@ -19,146 +19,129 @@
   background: rgba(74, 60, 53, 0.92) !important;
   backdrop-filter: blur(6px) !important;
   z-index: 9999 !important;
-  max-height: 110px;
+  max-height: 140px;
 }
 /* Search Overlay Styles */
 .search-overlay {
   position: fixed;
-  top: 0;
+  /* position the overlay so it fully overlaps the header area; nudge up to remove gap */
+  top: 5px; /* moved higher so the overlay sits completely over the header */
   left: 0;
   width: 100vw;
-  height: 120px; /* match header height */
+  height: 100px; /* increased height to ensure full overlap of header area */
   background: rgba(0,0,0,0.97);
   z-index: 2000;
   display: flex;
+  /* vertically center the form inside the header */
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.2s;
 }
 
+@media (max-width: 600px) {
+  /* Align overlay with mobile header and reduce height to avoid large empty area */
+  .search-overlay { top: 2px; height: 74px; align-items: center; }
+}
+
+/* Align the search form content with the header container by using the same horizontal padding
+   and a centered max-width. Place controls inline (not absolute) so icons and close button
+   sit on the same line as the input on all screen sizes. */
 .search-overlay-form {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  /* Stretch to cover the full header/content container: remove max-width so the
+     form fills the overlay horizontally (respecting the left/right padding). */
+  width: 80%;
+  max-width: none;
+  margin: 0;
+  padding: 6px 30px; /* same horizontal padding as header, slight vertical padding */
+  box-sizing: border-box;
   display: flex;
   align-items: center;
-  position: relative;
+  gap: 12px;
+  flex-wrap: nowrap; /* keep input and buttons on single line */
   background: transparent;
+  margin-top: 0;
+}
+
+/* Make the form wider on narrow/mobile screens so the input isn't tiny */
+@media (max-width: 600px) {
+  .search-overlay-form {
+    width: calc(100% - 5px); /* full width minus small padding */
+    padding: 0 16px;
+    margin-top: 0; /* remove invalid negative value so form stays inside overlay */
+    gap: 8px;
+  }
+  .search-overlay-input {
+    font-size: 1.05rem;
+    height: 26px;
+    padding: 0.6rem 0.9rem;
+  }
+  .search-overlay-icon-btn, .search-overlay-close {
+    height: 24px;
+    min-width: 36px;
+    font-size: 1.1rem;
+  }
 }
 
 .search-overlay-input {
   flex: 1;
-  font-size: 1.4rem;
-  padding: 1.2rem 2.5rem 1.2rem 1.2rem;
+  font-size: 1.05rem;
+  padding: 0.6rem 0.9rem;
   border: 2px solid #fff;
-  border-radius: 0.2em;
+  border-radius: 8px;
   background: transparent;
   color: #fff;
   outline: none;
+  height: 44px; /* slightly smaller to fit cleanly inside header */
+  min-width: 0; /* allow the input to shrink inside flex */
 }
 
 .search-overlay-input::placeholder {
   color: #ccc;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .search-overlay-icon-btn {
-  position: absolute;
-  right: 48px;
-  background: none;
+  /* inline search icon button placed to the right of the input */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  min-width: 36px;
+  padding: 4px;
+  background: transparent;
   border: none;
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   cursor: pointer;
-  z-index: 2;
 }
 
 .search-overlay-close {
-  position: absolute;
-  right: 8px;
-  background: none;
+  /* inline close button */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  min-width: 36px;
+  padding: 4px;
+  background: transparent;
   border: none;
   color: #fff;
-  font-size: 2rem;
+  font-size: 1.4rem;
   cursor: pointer;
-  z-index: 2;
-  top: 50%;
-  transform: translateY(-50%);
+}
+
+/* Ensure icon buttons don't shrink and sit inline */
+.search-overlay-icon-btn,
+.search-overlay-close {
+  flex: 0 0 auto;
+  line-height: 1;
 }
 
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-/* Search Overlay Styles */
-.search-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 120px; /* match header height */
-  background: rgba(0,0,0,0.97);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.2s;
-}
-
-.search-overlay-form {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  position: relative;
-  background: transparent;
-}
-
-.search-overlay-input {
-  flex: 1;
-  font-size: 1.4rem;
-  padding: 1.2rem 2.5rem 1.2rem 1.2rem;
-  border: 2px solid #fff;
-  border-radius: 0.2em;
-  background: transparent;
-  color: #fff;
-  outline: none;
-}
-
-.search-overlay-input::placeholder {
-  color: #ccc;
-  font-size: 1.2rem;
-}
-
-.search-overlay-icon-btn {
-  position: absolute;
-  right: 48px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 2;
-}
-
-.search-overlay-close {
-  position: absolute;
-  right: 8px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 2rem;
-  cursor: pointer;
-  z-index: 2;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+/* (duplicate block removed) */
 @media (max-width: 600px) {
   .header {
     top: 26px !important; /* Match mobile banner height */
@@ -189,6 +172,30 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(6px) !important;
   transition: top 0.2s;
+}
+
+/* Ensure header occupies full viewport width on small screens and remove restrictive max-widths */
+@media (max-width: 768px) {
+  .header, #main-header {
+    width: 100% !important;
+    max-width: none !important;
+    left: 0 !important;
+    right: 0 !important;
+    box-sizing: border-box !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  /* Keep logo centered visually */
+  .nav-center { position: static; transform: none; justify-content: center; }
+}
+
+/* Reduce logo sizes on small screens to avoid crowding */
+@media (max-width: 768px) {
+  .nav-left .logo { height: 40px; margin-left: 12px; margin-top: 8px; }
+  .nav-left .circular-logo { width: 64px; height: 64px; margin-left: 12px; margin-top: 6px; }
+  .center-logo { width: 20px; height: 10px; margin-bottom: 8px; margin-left: 0; margin-top: 2px; }
+  /* Slightly reduce header padding so banner + header fit on small screens */
+  .header { padding-left: 12px; padding-right: 12px; }
 }
 
 /* Logo */
@@ -349,11 +356,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100px;
-  width: 100px;
-  margin-left: 50px;
+  height: 64px; /* smaller desktop size to avoid overlap */
+  width: 64px;
+  margin-left: 56px; /* nudge further right to prevent sidebar overlap */
   text-decoration: none;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
 .nav-left .circular-logo:hover {
@@ -362,29 +369,36 @@
 
 .circular-logo-wrapper {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 64px; /* match the reduced circular frame */
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 12px;
-}
-
-.circular-text {
-  position: absolute;
-  top: -1px;
-  left: 10;
-  width: 105px;
-  height: 105px;
-  pointer-events: none;
+  margin-top: 6px;
+  /* keep the visual circular frame and allow surrounding text to show */
+  border-radius: 50%;
+  overflow: visible; /* allow circular text to sit around the logo */
+  box-shadow: 0 3px 8px rgba(0,0,0,0.16);
+  z-index: 1001; /* sit above sidebar icons if needed */
 }
 
 .center-logo {
-  width: 75px;
-  height: 75px;
-  margin-bottom: 20px;
-  margin-left: 1px;
-  margin-top: 4px;
-  object-fit: contain;
-  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: cover; /* fill the circular frame */
+  border-radius: 50%;
+  z-index: 1304; /* ensure logo sits above the circular text and header icons */
+}
+
+/* Ensure smaller variants remain circular on narrow screens */
+@media (max-width: 768px) {
+  /* Slightly smaller logo on mobile for better fit */
+  .circular-logo-wrapper { width: 40px; height: 40px; margin-top: 2px; z-index: 1302; }
+  /* Move the logo further to the right on mobile and nudge it up slightly.
+    Larger left offset to avoid overlap with the hamburger icon. Also add a small
+    transform shift so circular text (which is positioned absolutely) follows the
+    logo visually to the right. */
+  .nav-left .circular-logo { width: 40px; height: 40px; margin-left: 260px; margin-top: 0px; position: relative; z-index: 1303; transform: translateX(22px); }
+  .center-logo { border-radius: 50%; }
 }

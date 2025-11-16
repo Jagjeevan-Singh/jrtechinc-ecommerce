@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // Import BrowserRouter for local component context, and replace useNavigate
 import { useNavigate } from 'react-router-dom';
 // The external CSS import is removed to resolve the build error. Styles are now inline.
@@ -118,6 +118,8 @@ function Cart({ cartItems = [], onRemove, onUpdateQuantity, onMoveToWishlist, on
                     min-height: 100vh;
                     background-color: #F8F8F8; /* Soft Off-White Background */
                     padding: 40px 20px;
+                    margin-top: 110px; /* space for fixed header */
+                    box-sizing: border-box;
                     font-family: 'Inter', sans-serif;
                 }
                 .cart-container-wrapper h2 {
@@ -154,6 +156,7 @@ function Cart({ cartItems = [], onRemove, onUpdateQuantity, onMoveToWishlist, on
                 @media (max-width: 600px) {
                     .cart-container-wrapper {
                         padding: 20px 10px;
+                        margin-top: 90px; /* slightly smaller top margin on very small screens */
                     }
                     .cart-container-wrapper h2 {
                         font-size: 1.8em;
@@ -375,6 +378,7 @@ function Cart({ cartItems = [], onRemove, onUpdateQuantity, onMoveToWishlist, on
                     margin-bottom: 15px;
                     padding-top: 10px;
                     border-top: 1px dashed #E0E0E0;
+                    align-items: center;
                 }
                 .cart-coupon-input-pro {
                     flex-grow: 1;
@@ -382,6 +386,7 @@ function Cart({ cartItems = [], onRemove, onUpdateQuantity, onMoveToWishlist, on
                     border: 1px solid #D0D0D0;
                     border-radius: 8px;
                     font-size: 1em;
+                    min-width: 0; /* allow input to shrink inside flex container */
                 }
                 .apply-coupon-btn-pro {
                     background-color: #8C5230; /* Rich coffee color */
@@ -392,6 +397,7 @@ function Cart({ cartItems = [], onRemove, onUpdateQuantity, onMoveToWishlist, on
                     cursor: pointer;
                     font-weight: 600;
                     transition: background-color 0.2s;
+                    flex: 0 0 auto; /* prevent button from growing/shrinking awkwardly */
                 }
                 .apply-coupon-btn-pro:hover {
                     background-color: #4A3C35;
@@ -400,6 +406,13 @@ function Cart({ cartItems = [], onRemove, onUpdateQuantity, onMoveToWishlist, on
                     color: #d32f2f;
                     font-size: 0.9em;
                     margin-bottom: 10px;
+                }
+
+                /* Small screens: stack coupon input and button */
+                @media (max-width: 420px) {
+                    .coupon-row-pro { flex-direction: column; align-items: stretch; }
+                    .cart-coupon-input-pro { width: 100%; }
+                    .apply-coupon-btn-pro { width: 100%; }
                 }
                 
                 /* Checkout Button */
@@ -606,8 +619,26 @@ function Cart({ cartItems = [], onRemove, onUpdateQuantity, onMoveToWishlist, on
 }
 
 const App = () => {
-    // State to manage the cart
-    const [cartItems, setCartItems] = useState(initialMockCart);
+    // State to manage the cart — initialize empty and try to load from API if available
+    const [cartItems, setCartItems] = useState([]);
+
+    // Try to load cart from backend API (if present). If the API isn't available
+    // we silently continue with an empty cart so the UI remains usable in dev.
+    useEffect(() => {
+        let mounted = true;
+        (async () => {
+            try {
+                const res = await fetch('/api/cart');
+                if (!mounted) return;
+                if (!res.ok) return; // leave cart as empty
+                const data = await res.json();
+                if (Array.isArray(data?.items)) setCartItems(data.items);
+            } catch (err) {
+                // ignore network errors in dev — keep empty cart
+            }
+        })();
+        return () => { mounted = false; };
+    }, []);
     const [coupon, setCoupon] = useState('');
     const [couponError, setCouponError] = useState(null);
     const [discount, setDiscount] = useState(0);

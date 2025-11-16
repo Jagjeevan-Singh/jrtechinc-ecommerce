@@ -2,8 +2,131 @@
 .login-container {
     padding: 60px 20px;
     background-color: #f7f7f7; /* Light background for contrast */
-    min-height: calc(100vh - 150px); /* Fill screen vertically */
+    /* Cap the min-height so large screens don't show an overly tall background area */
+    min-height: min(calc(100vh - 150px), 900px); /* Fill screen vertically */
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Account page container (used by Account.jsx) */
+.account-container {
+    padding: 40px 20px;
+    margin-top: 110px; /* space to avoid fixed header overlap */
+    background: linear-gradient(180deg, #fbfbfc 0%, #f7f7f7 100%);
+    /* Keep the account area tall enough, but limit it on large displays */
+    min-height: min(calc(100vh - 150px), 900px);
+}
+
+/* Center content and create a subtle inner panel */
+.account-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Hero area at the top of the account page */
+.account-hero {
+    background: linear-gradient(90deg, rgba(11,102,255,0.03) 0%, rgba(11,102,255,0.01) 100%);
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    box-shadow: 0 8px 28px rgba(12,18,24,0.04);
+    margin-bottom: 20px;
+}
+
+.account-hero .hero-left {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.account-hero h1 {
+    font-size: 30px;
+    margin: 0;
+    color: #122;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+}
+
+.account-hero .subtitle { color: #6b6f6a; font-size: 14px; }
+
+/* Account details card */
+.account-details-block {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 8px 30px rgba(12,18,24,0.04);
+    display:flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.account-details-left { flex:1; }
+.account-details-right { display:flex; gap:12px; align-items:center; }
+
+.account-detail-label { color:#7a857b; font-weight:700; font-size:13px; }
+.account-detail-value { font-weight:700; color:#103522; font-size:15px; }
+
+/* Small meta under the name/email */
+.account-meta { color: #6b6f6a; font-size: 13px; margin-top:6px; }
+
+/* Order history heading */
+.order-history-heading { margin-top: 22px; margin-bottom: 12px; display:flex; justify-content:space-between; align-items:center; }
+.order-history-heading h2 { margin:0; font-size:20px; color:#122; font-weight:800; }
+.order-history-heading .count { color:#6b6f6a; font-size:14px; }
+
+/* Footer actions on account page */
+.account-footer-actions { display:flex; gap:12px; justify-content:flex-end; margin-top: 26px; }
+.account-footer-actions .btn { padding: 10px 14px; border-radius: 10px; }
+.account-footer-actions .logout-btn { background: #ff6b6b; color:#fff; border:none; box-shadow: 0 8px 20px rgba(255,107,107,0.12); }
+.account-footer-actions .view-orders-btn { background:#fff; border:1px solid #e6e2dc; color:#103522; }
+
+/* hero-right small stat */
+.hero-right .stat-num { font-weight:800; font-size:20px; color:#103522; }
+.hero-right .stat-label { color:#6b6f6a; font-size:13px; }
+
+@media (max-width: 600px) {
+    .account-container { margin-top: 80px; padding: 24px 12px; }
+}
+
+/* Login prompt box for unauthenticated users */
+.account-login-prompt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.login-prompt-box {
+    width: 100%;
+    max-width: 720px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 36px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    text-align: center;
+}
+.login-prompt-box h1 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+}
+.login-prompt-box p {
+    color: #666;
+    margin-bottom: 18px;
+}
+.login-prompt-box .action-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 8px;
+}
+.login-prompt-box .action-buttons .btn { min-width: 160px; }
+
+@media (max-width: 600px) {
+    .login-prompt-box { padding: 20px; border-radius: 8px; }
+    .login-prompt-box h1 { font-size: 1.4rem; }
+    .login-prompt-box .action-buttons { flex-direction: column; }
+    .login-prompt-box .action-buttons .btn { width: 100%; min-width: 0; }
 }
 
 /* --- Main Layout Box (Two Columns) --- */
@@ -202,3 +325,32 @@ form {
 .retry-btn:hover {
     background-color: #e68a00;
 }
+
+/* Order table tweaks */
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+.order-table th, .order-table td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #f0efe9;
+    vertical-align: middle;
+}
+.order-table a { color: #103522; text-decoration: none; font-weight: 600; }
+.order-table a:hover { text-decoration: underline; }
+.view-details-btn {
+    display: inline-block;
+    padding: 8px 10px;
+    background: #fff;
+    border: 1px solid #e6e2dc;
+    border-radius: 8px;
+    color: #2b2b2b;
+    text-decoration: none;
+}
+.view-details-btn:hover { background: #f6f5f3; }
+
+/* Ensure clickable areas are not blocked */
+.order-table td { position: relative; }
+.order-table td a, .order-table td button { position: relative; z-index: 2; }

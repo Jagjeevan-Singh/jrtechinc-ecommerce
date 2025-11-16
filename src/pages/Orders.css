@@ -1,0 +1,65 @@
+/* src/pages/Orders.css - styles for Orders list (card layout) */
+.orders-root { margin-top: 24px; max-width: 1100px; margin-left: auto; margin-right: auto; padding: 0 16px; }
+.orders-list { display:flex; flex-direction:column; gap:18px; }
+.order-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(16,21,26,0.06);
+  padding: 18px;
+  display:flex;
+  gap: 18px;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+}
+.order-thumb { width: 110px; height: 90px; border-radius: 10px; object-fit: cover; flex-shrink:0; }
+.order-main { flex: 1; display:flex; flex-direction:column; gap:8px; }
+.order-title { font-weight:700; color:#122; font-size:16px; line-height:1.2; }
+.order-meta { color:#6b6f6a; font-size:13px; }
+.order-right { width:260px; text-align:right; display:flex; flex-direction:column; gap:10px; align-items:flex-end; justify-content:space-between; }
+.order-amount { font-weight:800; color:#0b8a3b; font-size:16px; }
+.order-status { display:inline-flex; align-items:center; gap:8px; }
+.order-actions { display:flex; gap:8px; justify-content:flex-end; align-items:center; }
+.small-link { color:#0b66ff; text-decoration:none; font-weight:600; }
+
+/* modern rounded badge for status */
+.order-badge { padding:6px 10px; border-radius:999px; font-weight:700; font-size:12px; box-shadow: 0 4px 10px rgba(10,12,15,0.04); }
+.badge-success { background:#e6faf0; color:#0b6b3b; border:1px solid #c9f0dc; }
+.badge-pending { background:#fffaf0; color:#7a5b2d; border:1px solid #f5ead4; }
+.badge-failed { background:#fff5f5; color:#8b1f1f; border:1px solid #f2dede; }
+
+/* View details button style inside order list */
+.order-actions .btn { background: #f6f7f9; color: #111; padding: 10px 44px 10px 16px; border-radius: 10px; box-shadow: 0 8px 20px rgba(20,20,30,0.06); border: none; font-weight:700; position: relative; overflow: visible; }
+.order-actions .btn:hover { transform: translateY(-2px); }
+
+/* modern circular icon at the right of the button (chevron/eye) */
+.order-actions .btn::after { display: none; }
+
+/* colored circular icon inside the button (fallback to ::after removed) */
+.order-actions .btn .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-left: 10px;
+  background: linear-gradient(135deg,#06b6d4 0%, #7c3aed 100%);
+  box-shadow: 0 6px 14px rgba(124,58,237,0.12);
+}
+.order-actions .btn .btn-icon svg { display:block; }
+.order-actions .btn .btn-icon svg path { fill: #fff; }
+
+/* smaller screens: remove the pseudo icon to keep layout clean */
+@media (max-width: 480px) {
+  .order-actions .btn::after { display: none; }
+}
+
+/* align Rate & Review to the far right when space allows */
+.order-right .small-link { display:block; margin-top: 4px; }
+
+@media (max-width: 820px) {
+  .order-card { flex-direction:column; align-items:stretch; }
+  .order-right { width:100%; text-align:left; align-items:flex-start; }
+  .order-actions { justify-content:flex-start; }
+}

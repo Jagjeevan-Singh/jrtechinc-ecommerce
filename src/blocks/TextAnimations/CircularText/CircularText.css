@@ -1,22 +1,64 @@
 .circular-text {
-  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 18px); /* increased radius so text doesn't overlap other controls */
+  height: calc(100% + 18px);
   border-radius: 50%;
-  position: relative;
   font-weight: bold;
   color: #e5c593;
   text-align: center;
   cursor: pointer;
   transform-origin: 50% 50%;
   -webkit-transform-origin: 50% 50%;
+  z-index: 1; /* sit behind the logo image */
 }
 
 .circular-text span {
   position: absolute;
+  left: 50%;
+  top: 50%;
   display: inline-block;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  font-size: 10px;
-  transition: all 0.5s cubic-bezier(0, 0, 0, 1);
+  font-size: 10px; /* slightly larger for readability while staying compact */
+  transform-origin: 0 0; /* rotation origin; translateY handles radius */
+  transition: all 0.35s cubic-bezier(0, 0, 0, 1);
+  white-space: pre;
+}
+
+.circular-text span.star {
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffd86b; /* make star brighter */
+  text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+}
+
+.circular-rotator {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%;
+  animation-name: spin-clockwise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes spin-clockwise {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Slight adjustments for mobile to avoid overlap with header icons */
+@media (max-width: 768px) {
+  .circular-text {
+    /* increase diameter slightly and shift to the right on mobile so letters
+       clear the header icons and follow the logo's right-shift */
+    width: calc(100% + 15px);
+    height: calc(100% + 15px);
+    top: 50%; /* nudge circular text upward to clear icons */
+    left: 51%; /* shift circular text center to the right on mobile */
+  }
+  .circular-text span { font-size: 8px; }
+  .circular-text span.star { font-size: 10px; }
 }

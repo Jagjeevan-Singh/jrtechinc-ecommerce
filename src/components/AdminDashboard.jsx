@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './AdminDashboard.css';
+import logoImg from '../assets/logoround.jpeg';
 // --- CONFIGURATION ---
 const API_URL = "http://localhost:3000/api/products";
 const ADMIN_USER = "admin";
@@ -80,7 +81,7 @@ const ArrayEditor = ({ label, items, onChange, structure, canAdd = true }) => {
 
                         <div className="grid w-full gap-3 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
                             {structure.map(field => (
-                                <div key={field.key} className={`flex flex-col ${field.type === 'textarea' || field.key.includes('Image') ? 'col-span-full' : 'col-span-2 md:col-span-1'}`}>
+                                <div key={field.key} className={`flex flex-col ${field.type === 'textarea' || field.key.toLowerCase().includes('image') || field.key === 'url' ? 'col-span-full' : 'col-span-2 md:col-span-1'} array-field`}> 
                                     <label className="text-xs font-medium text-gray-500">{field.label}</label>
                                     {field.type === 'textarea' ? (
                                         <textarea
@@ -89,14 +90,28 @@ const ArrayEditor = ({ label, items, onChange, structure, canAdd = true }) => {
                                             className="w-full p-2 border rounded text-sm focus:ring-amber-500 focus:border-amber-500 min-h-[80px]"
                                         />
                                     ) : (
-                                        <input
-                                            type={field.type || 'text'}
-                                            value={item[field.key] || (field.type === 'number' && item[field.key] === 0 ? 0 : item[field.key] || '')}
-                                            onChange={e => handleItemChange(index, field.key, field.type === 'number' ? parseFloat(e.target.value) || 0 : e.target.value)}
-                                            className="w-full p-2 border rounded text-sm focus:ring-amber-500 focus:border-amber-500"
-                                            min={field.type === 'number' ? 0 : undefined}
-                                            step={field.type === 'number' ? "0.01" : undefined}
-                                        />
+                                        <>
+                                            <input
+                                                type={field.type || 'text'}
+                                                value={item[field.key] || (field.type === 'number' && item[field.key] === 0 ? 0 : item[field.key] || '')}
+                                                onChange={e => handleItemChange(index, field.key, field.type === 'number' ? parseFloat(e.target.value) || 0 : e.target.value)}
+                                                className="w-full p-2 border rounded text-sm focus:ring-amber-500 focus:border-amber-500"
+                                                min={field.type === 'number' ? 0 : undefined}
+                                                step={field.type === 'number' ? "0.01" : undefined}
+                                            />
+
+                                            {/* Image/URL preview when the field looks like an image */}
+                                            {( (field.key.toLowerCase().includes('image') || field.key === 'url') && (item[field.key] || '').toString().trim().startsWith('http')) && (
+                                                <div className="mt-2">
+                                                    <img
+                                                        src={item[field.key]}
+                                                        alt="preview"
+                                                        className="array-item-image-preview"
+                                                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                 </div>
                             ))}
@@ -143,6 +158,9 @@ const AdminDashboard = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editingProduct, setEditingProduct] = useState(null);
+    const [orders, setOrders] = useState([]);
+    const [hasFetchedOrders, setHasFetchedOrders] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
     const [notification, setNotification] = useState({ message: '', type: '' });
     
     // Tracks if product data has been loaded once
@@ -181,13 +199,66 @@ const AdminDashboard = () => {
         }
     }, [showNotification]);
 
+    // Fetch orders for admin view
+    const fetchOrders = useCallback(async () => {
+        try {
+            setLoading(true);
+            let response;
+            try {
+                response = await fetch('/api/orders');
+            } catch (err) {
+                console.warn('Relative /api/orders failed, will try localhost:3000', err && err.message);
+            }
+
+            if (!response || !response.ok) {
+                try { response = await fetch('http://localhost:3000/api/orders'); } catch(e) { console.error('Fallback host failed', e && e.message); }
+            }
+
+            if (!response) throw new Error('No response from orders API');
+
+            // Expect JSON
+            const contentType = response.headers.get('content-type') || '';
+            if (!contentType.includes('application/json')) {
+                const text = await response.text().catch(()=>null);
+                throw new Error(`Expected JSON from Orders API but got ${contentType || 'non-JSON'}: ${text?.slice(0,200)}`);
+            }
+
+            const data = await response.json();
+            let ordersArray = Array.isArray(data) ? data : (Array.isArray(data.value) ? data.value : []);
+            // Sort orders by date (newest first). Use createdAt or updatedAt when available.
+            ordersArray = ordersArray.slice().sort((a, b) => {
+                const tb = Date.parse(b?.createdAt || b?.updatedAt || '') || 0;
+                const ta = Date.parse(a?.createdAt || a?.updatedAt || '') || 0;
+                return tb - ta;
+            });
+            setOrders(ordersArray);
+            setHasFetchedOrders(true);
+            // Refresh product list so admin sees updated stock after orders change
+            try {
+                if (typeof fetchProducts === 'function') await fetchProducts();
+            } catch (e) {
+                console.warn('Failed to refresh products after fetching orders', e && e.message);
+            }
+            setLoading(false);
+        } catch (err) {
+            console.error(err);
+            showNotification('Error fetching orders from API. See console for details.', 'error');
+            setOrders([]);
+            setLoading(false);
+        }
+    }, [showNotification, fetchProducts]);
+
     // FIX: Optimized useEffect to prevent looping/blinking.
     useEffect(() => {
         // Only run if authenticated AND on the list page AND haven't fetched data yet
         if (isAuthenticated && page === 'list' && !hasFetched) {
             fetchProducts();
         }
-    }, [isAuthenticated, page, hasFetched, fetchProducts]);
+        // Fetch orders lazily when navigating to orders page
+        if (isAuthenticated && page === 'orders' && !hasFetchedOrders) {
+            fetchOrders();
+        }
+    }, [isAuthenticated, page, hasFetched, fetchProducts, hasFetchedOrders, fetchOrders]);
 
     // --- ROUTING/NAVIGATION ---
     const navigateTo = (newPage) => {
@@ -303,40 +374,64 @@ const AdminDashboard = () => {
     
     // --- RENDER FUNCTIONS ---
 
+    // Safe currency formatter: accepts numbers or numeric strings and returns a string with 2 decimals
+    const formatMoney = (value) => {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return (value || 0).toString();
+        return n.toFixed(2);
+    };
+
+    // Normalize payment status into a human friendly label
+    const paymentStatusLabel = (s) => {
+        if (!s && s !== 0) return 'Unknown';
+        const st = String(s).toLowerCase();
+        if (['paid', 'succeeded', 'success', 'completed'].some(k => st.includes(k))) return 'Success';
+        if (['fail', 'failed', 'declined', 'error'].some(k => st.includes(k))) return 'Failed';
+        if (['pending', 'created', 'authorized'].some(k => st.includes(k))) return 'Pending';
+        return String(s);
+    };
+
     const renderLogin = () => (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <form onSubmit={handleLogin} className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-sm">
-                <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Admin Login</h2>
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
-                        <input
-                            type="text"
-                            name="username"
-                            defaultValue={ADMIN_USER}
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            defaultValue={ADMIN_PASS}
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"
-                            required
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full bg-amber-500 text-white p-3 rounded-lg font-semibold hover:bg-amber-600 transition duration-150 shadow-md"
-                    >
-                        Login
-                    </button>
+        <div className="admin-login-outer">
+            <div className="admin-login-container">
+                <div className="brand-panel">
+                    <img src={logoImg} alt="JR TECH INC" className="brand-logo" />
+                    <h1 className="brand-title">JR TECH INC</h1>
+                    <p className="brand-sub">Admin Portal — Secure Access</p>
                 </div>
-                <p className="mt-4 text-center text-xs text-gray-500">Demo Credentials: **{ADMIN_USER}** / **{ADMIN_PASS}**</p>
-            </form>
+                <div className="form-panel">
+                    <form onSubmit={handleLogin} className="login-card">
+                        <h2 className="login-title">Sign in to Admin</h2>
+                        <p className="login-sub">Enter your administrator credentials to continue.</p>
+
+                        <div className="form-grid">
+                            <label className="label">Username</label>
+                            <input
+                                type="text"
+                                name="username"
+                                defaultValue={ADMIN_USER}
+                                className="input"
+                                required
+                            />
+
+                            <label className="label">Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                defaultValue={ADMIN_PASS}
+                                className="input"
+                                required
+                            />
+                        </div>
+
+                        <div className="form-actions">
+                            <button type="submit" className="btn-primary">Sign In</button>
+                        </div>
+
+                        <p className="demo-creds">Demo: <strong>{ADMIN_USER}</strong> / <strong>{ADMIN_PASS}</strong></p>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 
@@ -345,6 +440,13 @@ const AdminDashboard = () => {
             <header className="flex justify-between items-center mb-8 pb-4 border-b">
                 <h1 className="text-4xl font-extrabold text-gray-800">Product Catalog ({products.length})</h1>
                 <div className="flex items-center space-x-4">
+                    <button
+                        onClick={() => navigateTo('orders')}
+                        className="bg-indigo-600 text-white p-3 rounded-lg font-semibold hover:bg-indigo-700 transition flex items-center gap-2 shadow-md"
+                        title="View Orders"
+                    >
+                        <span className="text-lg">📦</span> Orders
+                    </button>
                     <button
                         onClick={startNewProduct}
                         className="bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition flex items-center gap-2 shadow-md"
@@ -437,28 +539,31 @@ const AdminDashboard = () => {
         return (
             <form onSubmit={handleSubmit} className="p-6 md:p-10 min-h-screen bg-gray-50">
                 {/* FIX: Centered Header Container */}
-                <header className="flex justify-between items-start mb-8 pb-4 border-b max-w-4xl mx-auto">
-                    <h1 className="text-3xl font-bold text-gray-800 pr-4">{isNew ? 'Create New Product' : `Edit: ${editingProduct.name}`}</h1>
-                    <div className="flex items-center space-x-3 flex-shrink-0">
+                <header className="editor-header mb-8 pb-4 border-b max-w-6xl mx-auto relative">
+                    <h1 className="editor-title">{isNew ? 'Create New Product' : `Edit: ${editingProduct.name}`}</h1>
+
+                    <div className="editor-actions" role="group" aria-label="Edit actions">
                         <button
                             type="button"
                             onClick={() => navigateTo('list')}
-                            className="text-gray-600 bg-white p-3 rounded-lg border hover:bg-gray-100 transition flex items-center gap-2"
+                            className="admin-action-btn cancel"
                         >
-                            {ICONS.Cancel} Cancel
+                            <span className="action-icon">{ICONS.Cancel}</span>
+                            <span className="action-label">Cancel</span>
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
-                            className="bg-amber-500 text-white p-3 rounded-lg font-semibold hover:bg-amber-600 transition flex items-center gap-2 shadow-md disabled:opacity-50"
+                            className="admin-action-btn save"
                         >
-                            {ICONS.Save} {loading ? 'Saving...' : (isNew ? 'Create Product' : 'Save Changes')}
+                            <span className="action-icon">{ICONS.Save}</span>
+                            <span className="action-label">{loading ? 'Saving...' : (isNew ? 'Create Product' : 'Save Changes')}</span>
                         </button>
                     </div>
                 </header>
                 
                 {/* Main Content Wrapper (Centered and Constrained) */}
-                <div className="max-w-4xl mx-auto space-y-8">
+                <div className="max-w-6xl mx-auto space-y-8">
                     
                     {/* --- 1. CORE DETAILS --- */}
                     <div className="bg-white p-6 rounded-lg shadow-xl space-y-4">
@@ -538,6 +643,95 @@ const AdminDashboard = () => {
         );
     };
 
+    const renderOrders = () => {
+        return (
+            <div className="p-6 md:p-10 min-h-screen bg-gray-50">
+                <header className="flex justify-between items-center mb-6 pb-4 border-b">
+                    <div className="flex items-center gap-4">
+                        <button onClick={() => navigateTo('list')} className="text-gray-600 bg-white p-2 rounded-lg border hover:bg-gray-100">◀ Back</button>
+                        <h1 className="text-3xl font-extrabold text-gray-800">Orders ({orders.length})</h1>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <input type="search" placeholder="Search order id / customer" onChange={(e) => {
+                            const v = e.target.value.trim().toLowerCase();
+                            if(!v) { setHasFetchedOrders(false); fetchOrders(); return; }
+                            setOrders(prev => prev.filter(o => (o._id || '').toString().toLowerCase().includes(v) || (o.orderId||'').toString().toLowerCase().includes(v) || (o.email||'').toString().toLowerCase().includes(v) || (o.name||'').toString().toLowerCase().includes(v)));
+                        }} className="p-2 border rounded-lg" />
+                        <button onClick={() => fetchOrders()} className="bg-amber-500 text-white p-2 rounded-lg">Refresh</button>
+                    </div>
+                </header>
+
+                {loading && !hasFetchedOrders && (
+                    <div className="text-center py-20 text-xl text-gray-500">Loading orders...</div>
+                )}
+
+                {!loading && orders.length === 0 && (
+                    <div className="text-center py-20 text-gray-500">No orders found.</div>
+                )}
+
+                {!loading && orders.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {orders.map(order => (
+                            <div key={order._id || order.orderId} className="order-card bg-white p-4 rounded-lg shadow-md">
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <div className="text-sm text-gray-500">Order</div>
+                                        <div className="font-semibold text-lg">{order.orderId || order._id}</div>
+                                        <div className="text-sm text-gray-600">{new Date(order.createdAt || Date.now()).toLocaleString()}</div>
+                                    </div>
+                                    <div className="text-right">
+                                        <div className="text-sm text-gray-500">Total</div>
+                                        <div className="font-bold text-lg">₹{formatMoney(order.total ?? order.amount ?? order.amount_due ?? 0)}</div>
+                                        <div className="mt-2">
+                                            <button onClick={() => setSelectedOrder(selectedOrder && selectedOrder._id === order._id ? null : order)} className="px-3 py-1 rounded-lg border bg-white hover:bg-gray-50">{selectedOrder && selectedOrder._id === order._id ? 'Hide' : 'View'}</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-3 text-sm text-gray-700">
+                                    <div><strong>Customer:</strong> {order.name || order.shipping?.name || order.email || '—'}</div>
+                                    <div><strong>Items:</strong> {order.items ? order.items.length : (order.cart && order.cart.length) || 0}</div>
+                                    <div><strong>Status:</strong> {order.status || order.paymentStatus || '—'}</div>
+                                </div>
+
+                                {selectedOrder && selectedOrder._id === order._id && (
+                                    <div className="order-detail mt-4 p-3 bg-gray-50 rounded">
+                                        <h4 className="font-semibold mb-2">Order Details</h4>
+                                        <div className="space-y-2">
+                                            {(order.items || order.cart || []).map((it, idx) => (
+                                                <div key={idx} className="flex items-center gap-3 p-2 bg-white rounded border">
+                                                    <img src={it.imageUrl || it.variantImage || (it.imageUrl===undefined?null:'https://placehold.co/60x40')} alt={it.name || it.variantName} style={{width:60,height:40,objectFit:'cover',borderRadius:6}} />
+                                                    <div className="flex-1 text-sm">
+                                                        <div className="font-medium">{it.name || it.productName || it.variantName}</div>
+                                                        <div className="text-gray-500">Qty: {it.quantity || it.qty || 1} • ₹{formatMoney(it.price ?? it.variantPrice ?? it.amount ?? 0)}</div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="mt-3 text-sm text-gray-700 space-y-1">
+                                            <div><strong>Name:</strong> {order.name || order.deliveryAddress?.fullName || order.shipping?.name || order.userEmail || '—'}</div>
+                                            <div><strong>Email:</strong> {order.userEmail || order.email || order.shipping?.email || order.deliveryAddress?.email || '—'}</div>
+                                            <div><strong>Phone:</strong> {order.deliveryAddress?.phone || order.phone || order.shipping?.phone || '—'}</div>
+                                            <div><strong>Address:</strong> {
+                                                order.deliveryAddress ? (
+                                                    `${order.deliveryAddress.street || ''}${order.deliveryAddress.city ? ', ' + order.deliveryAddress.city : ''}${order.deliveryAddress.state ? ', ' + order.deliveryAddress.state : ''}${order.deliveryAddress.postalCode ? ' - ' + order.deliveryAddress.postalCode : ''}`
+                                                ) : order.shipping ? (
+                                                    `${order.shipping.street || ''}${order.shipping.city ? ', ' + order.shipping.city : ''}${order.shipping.zip ? ' - ' + order.shipping.zip : ''}`
+                                                ) : '—'
+                                            }</div>
+                                            <div><strong>Total:</strong> ₹{formatMoney(order.totalAmount ?? order.total ?? order.amount ?? order.amount_due ?? 0)}</div>
+                                            <div><strong>Payment:</strong> {paymentStatusLabel(order.paymentStatus || order.status || (order.paymentEvents && order.paymentEvents.length ? order.paymentEvents[order.paymentEvents.length - 1].status : '') || order.payment?.status)} {order.paymentId || order.transactionId || order.payment?.id ? `(${order.paymentId || order.transactionId || order.payment?.id})` : ''}</div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
     return (
         <>
             <Notification message={notification.message} type={notification.type} onClose={() => setNotification({ message: '', type: '' })} />
@@ -545,6 +739,8 @@ const AdminDashboard = () => {
                 {!isAuthenticated && renderLogin()}
 
                 {isAuthenticated && page === 'list' && renderList()}
+
+                {isAuthenticated && page === 'orders' && renderOrders()}
 
                 {isAuthenticated && (page === 'edit' || page === 'new') && renderEditor()}
             </div>

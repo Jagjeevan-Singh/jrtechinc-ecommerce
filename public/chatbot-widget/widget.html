@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>JR Tech Inc — Chatbot Widget</title>
+  <link rel="stylesheet" href="./widget.css">
+</head>
+<body>
+
+<div id="jr-chatbot-root" aria-live="polite">
+  <!-- Floating trigger button -->
+  <button id="jr-chatbot-toggle" aria-expanded="false" aria-controls="jr-chatbot-panel" title="Chat with us">
+    <!-- Image (preferred). Use root-relative path when served. -->
+  <img id="jr-chat-toggle-img" src="/src/assets/logoround.jpeg" alt="JR Tech Inc logo" />
+    <!-- HTML fallback shown by default; hidden by JS if image loads successfully -->
+    <span id="jr-chat-fallback" aria-hidden="true">JR</span>
+  </button>
+
+  <!-- Chat panel -->
+  <aside id="jr-chatbot-panel" role="dialog" aria-label="Help Center" hidden>
+    <header class="panel-header">
+      <div class="panel-title">Help Center</div>
+      <button id="jr-chatbot-close" aria-label="Close help">✖</button>
+    </header>
+
+    <div class="panel-body">
+      <div class="search-wrap">
+        <input id="jr-chat-search" type="search" placeholder="Type a question or keyword..." aria-label="Search help" autocomplete="off" />
+        <button id="jr-chat-search-btn" aria-label="Search">🔍</button>
+        <ul id="jr-suggestions" class="suggestions" role="listbox" aria-label="Suggestions"></ul>
+      </div>
+
+      <div id="jr-chat-content" class="chat-content">
+        <div class="categories" id="jr-categories"></div>
+        <div class="answer-pane" id="jr-answer-pane" hidden>
+          <div id="jr-answer-question" class="answer-question"></div>
+          <div id="jr-answer-text" class="answer-text"></div>
+          <div class="escalation" id="jr-escalation" hidden></div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="panel-footer">
+      <small>Can't find an answer? Email us at <a href="mailto:jrtechinc21@gmail.com">jrtechinc21@gmail.com</a></small>
+    </footer>
+  </aside>
+</div>
+
+<script src="./widget.js"></script>
+</body>
+</html>

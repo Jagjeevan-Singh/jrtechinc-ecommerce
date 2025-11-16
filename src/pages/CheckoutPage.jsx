@@ -1,4 +1,8 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from "react-router-dom";
+import CheckoutButton from "../components/CheckoutButton";
+
+{/* <CheckoutButton amount={orderTotal} customer={userDetails} /> */}
 
 // The CheckoutPage component handles the address form and final order summary display.
 function CheckoutPage({ 
@@ -6,6 +10,8 @@ function CheckoutPage({
     onProceedToPayment, 
     cartItems = [] 
 }) { 
+    const navigate = useNavigate();
+    const orderTotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     // ✅ Auto-calculate subtotal & total, replacing the previous fixed finalTotal
     const finalTotal = useMemo(() => {
@@ -63,17 +69,14 @@ function CheckoutPage({
 
     // Handles form submission and triggers payment flow
     const handleSubmit = (e) => {
-        e.preventDefault();
-        if (validateForm()) {
-            setIsSubmitting(true);
-            console.log("Submitting address:", formData);
-            
-            setTimeout(() => {
-                setIsSubmitting(false);
-                onProceedToPayment(formData);
-            }, 1000);
-        }
+    e.preventDefault();
+    if (validateForm()) {
+        setIsSubmitting(false);
+        // Do NOT navigate anywhere
+        // CheckoutButton will trigger Razorpay popup
+    }
     };
+
     
     // Calculate summary details
     const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -478,17 +481,17 @@ function CheckoutPage({
 
                             {/* Proceed Button */}
                             <div className="full-width">
-                                <button
-                                    type="submit"
-                                    className="proceed-payment-btn"
-                                    disabled={isSubmitting}
-                                >
-                                    {isSubmitting ? (
-                                        <div className="loading-spinner"></div>
-                                    ) : (
-                                        'Proceed to Payment Gateway'
-                                    )}
-                                </button>
+                                <CheckoutButton 
+                                    amount={finalTotal.discountedTotalDisplay} 
+                                    customer={{
+                                        name: formData.fullName,
+                                        email: formData.email,
+                                        phone: formData.phone,
+                                        address: formData
+                                    }}
+                                    items={cartItems}
+                                />
+
                             </div>
                         </div>
                     </form>

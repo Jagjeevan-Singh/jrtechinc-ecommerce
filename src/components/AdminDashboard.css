@@ -12,6 +12,136 @@
     width: 100%;
 }
 
+/* --- Admin Login Styles --- */
+.admin-login-outer {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #0f172a 0%, #020617 45%, #031018 100%);
+    padding: 40px 20px;
+}
+
+.admin-login-container {
+    width: 100%;
+    max-width: 980px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+}
+
+.brand-panel {
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border-radius: 14px;
+    padding: 36px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #f8e7cf;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+}
+
+.brand-logo {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.06);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+.brand-title {
+    margin-top: 14px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.brand-sub {
+    margin-top: 8px;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.8);
+}
+
+.form-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.15);
+}
+
+.login-title {
+    font-size: 1.5rem;
+    margin: 0 0 6px 0;
+    color: #0f172a;
+}
+
+.login-sub {
+    margin: 0 0 18px 0;
+    color: #475569;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.label {
+    font-size: 0.85rem;
+    color: #334155;
+}
+
+.input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    box-shadow: inset 0 1px 2px rgba(2,6,23,0.03);
+    font-size: 0.95rem;
+}
+
+.form-actions { text-align: right; margin-top: 8px; }
+
+.btn-primary {
+    background: linear-gradient(90deg, #f59e0b, #f97316);
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(249,115,22,0.18);
+}
+
+.demo-creds { margin-top: 14px; font-size: 0.8rem; color: #64748b; text-align: center; }
+
+/* Responsive: stack panels on small screens */
+@media (max-width: 840px) {
+    .admin-login-container { grid-template-columns: 1fr; max-width: 420px; }
+    .brand-panel { padding: 24px; }
+    .brand-logo { width: 90px; height: 90px; }
+    .nav-left .circular-logo { margin-left: 28px; } /* keep header logo adjusted */
+}
+
+/* Header responsive tweaks */
+@media (max-width: 900px) {
+    .editor-header { flex-direction: column; align-items: stretch; padding: 12px 16px; }
+    .editor-actions { justify-content: flex-end; margin-top: 12px; }
+    .editor-title { font-size: 1.6rem; max-width: 100%; }
+}
+
 /* Base styles for the entire view */
 body {
     margin: 0;
@@ -84,6 +214,194 @@ body {
 /* Ensures the header itself doesn't force full viewport width outside its container */
 .admin-app header {
     width: 100%;
+}
+
+/* --- Editor Header & Action Buttons --- */
+.editor-header {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 28px;
+    padding: 12px 24px; /* provide consistent gutters */
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.editor-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.02;
+    margin: 0;
+    max-width: calc(100% - 260px); /* leave room for action buttons */
+    word-break: break-word;
+}
+
+.editor-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.admin-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(2,6,23,0.12);
+}
+
+.admin-action-btn .action-icon { font-size: 1.1rem; }
+.admin-action-btn .action-label { font-size: 0.95rem; }
+
+.admin-action-btn.cancel {
+    background: #fff;
+    color: #6b21a8; /* purple X */
+    border: 1px solid #e6e6f0;
+}
+
+.admin-action-btn.save {
+    background: linear-gradient(90deg,#f59e0b,#f97316);
+    color: #fff;
+}
+
+/* Make form sections look like cards similar to the screenshot */
+.admin-app .max-w-4xl, .admin-app .max-w-6xl, .admin-app .max-w-8xl {
+    max-width: 1100px;
+}
+
+.admin-app .bg-white.p-6.rounded-lg.shadow-xl {
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.06);
+}
+
+/* Generic card styles to ensure consistent look regardless of class order */
+.admin-app .rounded-lg {
+    border-radius: 12px !important;
+}
+.admin-app .shadow-xl {
+    box-shadow: 0 10px 30px rgba(2,6,23,0.06) !important;
+}
+
+/* Ensure the main editor area is centered and uses the same width as header */
+.admin-app form {
+    width: 100%;
+    display: block;
+}
+.admin-app .max-w-6xl {
+    max-width: 1100px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+/* Make header title larger and wrap cleanly like the screenshot */
+/* duplicate removed; defined above */
+
+/* Slight visual separation under header */
+.editor-header { padding-bottom: 18px; }
+
+/* Improve spacing for section cards to match screenshot */
+.admin-app .max-w-6xl > .space-y-8 > .bg-white {
+    margin-top: 6px;
+    padding: 22px;
+}
+
+.admin-app h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* Slightly larger input heights */
+.admin-app input[type="text"], .admin-app input[type="number"], .admin-app textarea {
+    padding: 12px 14px;
+    border-radius: 8px;
+}
+
+/* Variant/Add buttons style */
+.admin-app .bg-amber-100 {
+    background: linear-gradient(180deg,#fff7ed,#fef3c7);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+}
+
+/* ---------- New: ArrayEditor visual improvements ---------- */
+.array-field { position: relative; }
+
+/* Image preview for any image/url fields inside the array editor */
+.array-item-image-preview {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.04);
+}
+
+/* Tighter per-item card layout in ArrayEditor */
+.admin-app .space-y-4 > div.flex {
+    background: linear-gradient(180deg,#ffffff,#fbfbfb);
+    border-radius: 12px;
+    padding: 12px !important;
+    border: 1px solid #eef2ff;
+}
+
+/* Improve remove button position and style */
+.admin-app .space-y-4 > div.flex .text-red-500 {
+    background: transparent;
+    border-radius: 6px;
+    padding: 6px;
+}
+
+/* Variant thumbnail inside variant editor (preview smaller) */
+.variant-thumb { width: 56px !important; height: 56px !important; border-radius: 8px; object-fit: cover; border: 1px solid #eef2ff; }
+
+/* Make the variant card visually clearer when selected inside product landing */
+.variant-card.selected { box-shadow: 0 6px 20px rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.12); }
+
+/* Make the two-column final section a little more spacious */
+.admin-app .grid-cols-1.md\:grid-cols-2 { gap: 26px; }
+
+/* Smaller typography for detail icons/labels in product details */
+.admin-app .text-xs.font-medium.text-gray-500 { font-size: 0.78rem; }
+
+/* Make Add buttons more prominent and aligned to the right for consistent visual flow */
+.admin-app .bg-amber-100 { justify-content: center; }
+
+/* ---------- Orders page styling ---------- */
+.order-card {
+    border: 1px solid #eef2ff;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.order-card:hover { transform: translateY(-4px); box-shadow: 0 14px 32px rgba(16,24,40,0.08); }
+.order-card .order-detail { background: #ffffff; border: 1px solid #f3f4f6; }
+.order-detail img { border-radius: 6px; }
+
+/* Responsive adjustments for orders grid */
+@media (max-width: 900px) {
+    .order-card { padding: 12px; }
+    .order-detail { padding: 10px; }
+}
+
+
+/* Two-column layout for final sections */
+.admin-app .grid-cols-1.md\:grid-cols-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 /* Ensure all form inputs have consistent shadow/transition */
