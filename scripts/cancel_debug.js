@@ -11,7 +11,7 @@ async function post(url) {
 }
 
 (async function(){
-  const base = 'http://localhost:3000';
+  const base = process.env.BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
   try {
     console.log('Fetching payments...');
     const resp = await fetch(`${base}/api/debug/payments?email=jagjeevan004@gmail.com`);

@@ -3,6 +3,7 @@ import './ProductsSidebar.css';
 import { useNavigate } from 'react-router-dom';
 import { FaStar, FaHeart } from 'react-icons/fa';
 
+const BACKEND_HOST = import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
 const API = '/api/products';
 
 export default function ProductsSidebar({ onAdd, onWishlist, wishlistItems = [] }) {
@@ -38,7 +39,7 @@ export default function ProductsSidebar({ onAdd, onWishlist, wishlistItems = [] 
       setError(null);
       try {
         let res;
-        try { res = await fetch(API); } catch (e) { res = await fetch('http://localhost:3000' + API); }
+    try { res = await fetch(API); } catch (e) { res = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + API); }
         if (!res.ok) throw new Error('Failed to fetch products: ' + res.status);
         const data = await res.json();
   if (!cancelled) setProducts(data || []);

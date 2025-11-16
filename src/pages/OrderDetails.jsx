@@ -16,7 +16,7 @@ function CancelButton({ orderId, onCancelled }) {
       let res = null;
       try { res = await fetch(`/api/orders/${orderId}/cancel`, { method: 'POST' }); } catch(e) { res = null; }
       if (!res || !res.ok) {
-        try { res = await fetch(`http://localhost:3000/api/orders/${orderId}/cancel`, { method: 'POST' }); } catch(e) { res = res || null; }
+        try { res = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + `/api/orders/${orderId}/cancel`, { method: 'POST' }); } catch(e) { res = res || null; }
       }
       if (!res) throw new Error('No response from server');
       const json = await res.json();
@@ -68,8 +68,8 @@ const OrderDetails = () => {
 
         // If relative fetch failed or returned a non-ok response, try direct backend host
         if (!res || !res.ok) {
-          try {
-            const direct = await fetch(`http://localhost:3000/api/orders/${id}`);
+            try {
+            const direct = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + `/api/orders/${id}`);
             if (direct && direct.ok) {
               res = direct;
             } else {
@@ -93,7 +93,7 @@ const OrderDetails = () => {
               let pRes = null;
               try { pRes = await fetch(`/api/debug/payment/${id}`); } catch(e) { pRes = null; }
               if ((!pRes || !pRes.ok)) {
-                try { pRes = await fetch(`http://localhost:3000/api/debug/payment/${id}`); } catch(e) { pRes = null; }
+                try { pRes = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + `/api/debug/payment/${id}`); } catch(e) { pRes = null; }
               }
               if (pRes && pRes.ok) {
                 const pJson = await pRes.json();
@@ -124,7 +124,7 @@ const OrderDetails = () => {
         // If order has items with productId, fetch product details for each
         if (json.items && json.items.length > 0) {
           const augmented = await Promise.all(json.items.map(async (it) => {
-            if (it.productId) {
+                if (it.productId) {
               try {
                 const pRes = await fetch(`/api/products/${it.productId}`);
                 if (pRes.ok) {

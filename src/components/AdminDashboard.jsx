@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import './AdminDashboard.css';
 import logoImg from '../assets/logoround.jpeg';
 // --- CONFIGURATION ---
-const API_URL = "http://localhost:3000/api/products";
+const BACKEND_HOST = import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
+const API_URL = `${BACKEND_HOST}/api/products`;
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "pnIcdt2FjeQckSvqO6G7LnjgcBx1"; // Mock password matches Firebase ID
 // --- ICONS (Using guaranteed HTML entities/text symbols) ---

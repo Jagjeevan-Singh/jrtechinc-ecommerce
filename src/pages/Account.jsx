@@ -40,15 +40,15 @@ const Account = () => {
                     try {
                         response = await fetch(ORDER_API_URL);
                     } catch (err) {
-                        console.warn('Relative /api request failed, will retry with http://localhost:3000', err && err.message);
+                        console.warn('Relative /api request failed, will retry with backend host', err && err.message);
                     }
 
                     // If relative fetch failed or returned non-ok, try direct backend host as a fallback
                     if (!response || !response.ok) {
                         try {
-                            response = await fetch('http://localhost:3000/api/orders');
+                            response = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + '/api/orders');
                         } catch (err) {
-                            console.error('Fallback to http://localhost:3000 failed', err && err.message);
+                            console.error('Fallback to backend host failed', err && err.message);
                         }
                     }
 

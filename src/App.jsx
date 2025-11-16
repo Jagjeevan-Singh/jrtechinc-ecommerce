@@ -28,7 +28,8 @@ import ProductsSidebar from "./pages/ProductsSidebar";
 
 import "./App.css";
 
-const API_URL = "http://localhost:3000/api/products"; 
+const BACKEND_HOST = import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
+const API_URL = `${BACKEND_HOST}/api/products`;
 
 function App() {
   const [cartItems, setCartItems] = useState([]);

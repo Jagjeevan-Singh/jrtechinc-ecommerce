@@ -13,7 +13,8 @@ const signature = crypto.createHmac('sha256', secret).update(`${orderId}|${payme
 
 const body = { razorpay_order_id: orderId, razorpay_payment_id: paymentId, razorpay_signature: signature };
 
-const res = await fetch('http://localhost:3000/api/payment/verify-payment', {
+const base = process.env.BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
+const res = await fetch(base + '/api/payment/verify-payment', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify(body),

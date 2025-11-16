@@ -21,7 +21,7 @@ function postJson(url) {
 }
 
 (async function(){
-  const base = 'http://localhost:3000';
+  const base = process.env.BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
   const tests = [
     { label: 'By Payment._id', url: `${base}/api/orders/69074e5de623c8a239843724/cancel` },
     { label: 'By Razorpay orderId', url: `${base}/api/orders/order_Ras64aMTlh2hPg/cancel` }
