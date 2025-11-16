@@ -39,8 +39,26 @@ export default function ProductsSidebar({ onAdd, onWishlist, wishlistItems = [] 
       setError(null);
       try {
         let res;
-    try { res = await fetch(API); } catch (e) { res = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + API); }
-        if (!res.ok) throw new Error('Failed to fetch products: ' + res.status);
+      // Try relative path first (works when frontend proxy or same-origin is set up).
+      // If the response is non-OK (404 on Vercel static site), fall back to the
+      // configured backend host so the frontend can still load products.
+      try {
+        res = await fetch(API);
+        if (!res || !res.ok) {
+          try {
+            res = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + API);
+          } catch (e) {
+            res = res || null;
+          }
+        }
+      } catch (e) {
+        try {
+          res = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + API);
+        } catch (er) {
+          res = null;
+        }
+      }
+      if (!res || !res.ok) throw new Error('Failed to fetch products: ' + (res && res.status));
         const data = await res.json();
   if (!cancelled) setProducts(data || []);
       } catch (e) {
