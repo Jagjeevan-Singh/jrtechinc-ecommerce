@@ -13,10 +13,6 @@ function SideBar() {
   const go = (path) => {
     setOpen(false);
     try { navigate(path); } catch (e) {}
-    // Small timeout to allow the sidebar to close visually before hash change
-    setTimeout(() => {
-      try { window.location.hash = `#${path}`; } catch (e) {}
-    }, 40);
   };
 
   return (
