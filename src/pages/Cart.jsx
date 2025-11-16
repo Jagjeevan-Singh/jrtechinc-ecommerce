@@ -628,9 +628,17 @@ const App = () => {
         let mounted = true;
         (async () => {
             try {
-                const res = await fetch('/api/cart');
+                let res;
+                try {
+                    res = await fetch('/api/cart');
+                    if (!res || !res.ok) {
+                        try { res = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + '/api/cart'); } catch(e) { res = res || null; }
+                    }
+                } catch (e) {
+                    try { res = await fetch((import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com') + '/api/cart'); } catch (er) { res = null; }
+                }
                 if (!mounted) return;
-                if (!res.ok) return; // leave cart as empty
+                if (!res || !res.ok) return; // leave cart as empty
                 const data = await res.json();
                 if (Array.isArray(data?.items)) setCartItems(data.items);
             } catch (err) {

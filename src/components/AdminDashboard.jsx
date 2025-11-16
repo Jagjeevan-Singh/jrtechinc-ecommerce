@@ -207,12 +207,19 @@ const AdminDashboard = () => {
             let response;
             try {
                 response = await fetch('/api/orders');
+                if (!response || !response.ok) {
+                    try {
+                        response = await fetch(BACKEND_HOST + '/api/orders');
+                    } catch (e) {
+                        response = response || null;
+                    }
+                }
             } catch (err) {
-                console.warn('Relative /api/orders failed, will try localhost:3000', err && err.message);
-            }
-
-            if (!response || !response.ok) {
-                try { response = await fetch('http://localhost:3000/api/orders'); } catch(e) { console.error('Fallback host failed', e && e.message); }
+                try {
+                    response = await fetch(BACKEND_HOST + '/api/orders');
+                } catch (e) {
+                    response = null;
+                }
             }
 
             if (!response) throw new Error('No response from orders API');
