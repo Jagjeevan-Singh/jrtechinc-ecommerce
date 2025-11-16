@@ -36,7 +36,8 @@ const CheckoutButton = ({ amount, items = [], user, customer }) => {
     }
 
     const clientUserId = customerInfo?.uid || (auth && auth.currentUser && auth.currentUser.uid) || null;
-    const response = await fetch('/api/payment/create-order', {
+  const BACKEND_HOST = import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
+  const response = await fetch(BACKEND_HOST + '/api/payment/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -107,7 +108,7 @@ const CheckoutButton = ({ amount, items = [], user, customer }) => {
             deliveryAddress,
             userEmail: customerInfo?.email || ''
           };
-          const verifyRes = await fetch('/api/payment/verify-payment', {
+          const verifyRes = await fetch(BACKEND_HOST + '/api/payment/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(verifyPayload)
@@ -153,7 +154,7 @@ const CheckoutButton = ({ amount, items = [], user, customer }) => {
           deliveryAddress,
           userEmail: customerInfo?.email || ''
         };
-        const verifyRes = await fetch('/api/payment/verify-payment', {
+  const verifyRes = await fetch(BACKEND_HOST + '/api/payment/verify-payment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(mockPayload)
