@@ -20,21 +20,15 @@ const ICONS = {
     Stock: '📦'
 };
 
-// --- HELPER COMPONENTS ---
-
-// 1. Simple Notification component
-const Notification = ({ message, type, onClose }) => {
+// Minimal notification/toast component used by the admin UI
+const Notification = ({ message, type = 'success', onClose }) => {
     if (!message) return null;
-    const bgColor = type === 'error' ? 'bg-red-500' : 'bg-green-500';
-    
+    const bg = type === 'error' ? 'background: #FEF3F2; border: 1px solid #FECACA; color: #9B1C1C;' : 'background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46;';
     return (
-        <div className={`fixed top-4 right-4 p-4 rounded-lg text-white shadow-xl z-50 ${bgColor}`}>
-            <div className="flex items-center">
-                <span className="mr-2 font-bold">{type === 'error' ? '❗' : '✔'}</span>
-                <span>{message}</span>
-                <button onClick={onClose} className="ml-4 font-bold">
-                    {ICONS.Cancel}
-                </button>
+        <div role="status" aria-live="polite" style={{ position: 'fixed', top: 16, right: 16, zIndex: 9999, padding: '10px 14px', borderRadius: 8, boxShadow: '0 6px 18px rgba(0,0,0,0.06)', ...{} }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ flex: 1, fontSize: 14 }}>{message}</div>
+                <button aria-label="Close notification" onClick={onClose} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: 14 }}>✖</button>
             </div>
         </div>
     );
@@ -205,21 +199,12 @@ const AdminDashboard = () => {
         try {
             setLoading(true);
             let response;
+            // Use backend host directly to avoid hitting Vercel static 404 for /api routes
             try {
-                response = await fetch('/api/orders');
-                if (!response || !response.ok) {
-                    try {
-                        response = await fetch(BACKEND_HOST + '/api/orders');
-                    } catch (e) {
-                        response = response || null;
-                    }
-                }
+                response = await fetch(BACKEND_HOST + '/api/orders');
             } catch (err) {
-                try {
-                    response = await fetch(BACKEND_HOST + '/api/orders');
-                } catch (e) {
-                    response = null;
-                }
+                console.error('Failed to fetch orders from backend host', err && err.message);
+                response = null;
             }
 
             if (!response) throw new Error('No response from orders API');
