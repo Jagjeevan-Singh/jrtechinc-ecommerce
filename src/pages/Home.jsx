@@ -26,18 +26,19 @@ const Home = () => {
     }, [banners.length]);
 
     // --- API Fetch Logic ---
-    const BACKEND_HOST = import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
     useEffect(() => {
         const fetchFeatured = async () => {
             try {
                 // Fetch products from your API. We limit it to 4 to show featured items.
-                const response = await fetch(`${BACKEND_HOST}/api/products`);
+                console.log('Fetching featured products from: /api/products');
+                const response = await fetch('/api/products');
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 
                 const data = await response.json();
+                console.log('Featured products loaded:', data.length);
                 
                 // Take the first 4 products as "featured"
                 setFeaturedProducts(data.slice(0, 4)); 
