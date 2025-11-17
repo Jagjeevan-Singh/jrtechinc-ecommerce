@@ -26,12 +26,19 @@ const Home = () => {
     }, [banners.length]);
 
     // --- API Fetch Logic ---
+    const BACKEND_HOST = import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
     useEffect(() => {
         const fetchFeatured = async () => {
             try {
-                // Fetch products from your API. We limit it to 4 to show featured items.
+                // Try proxied API first
                 console.log('Fetching featured products from: /api/products');
-                const response = await fetch('/api/products');
+                let response = await fetch('/api/products');
+                
+                // If proxied request fails or returns HTML, try direct backend
+                if (!response.ok || response.headers.get('content-type')?.includes('text/html')) {
+                    console.warn('Proxied API failed, trying direct backend:', `${BACKEND_HOST}/api/products`);
+                    response = await fetch(`${BACKEND_HOST}/api/products`);
+                }
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);

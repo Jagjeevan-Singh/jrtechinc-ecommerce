@@ -5,6 +5,7 @@ import { FaStar, FaHeart } from 'react-icons/fa';
 
 const BACKEND_HOST = import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
 const API = '/api/products';
+const API_FALLBACK = `${BACKEND_HOST}/api/products`;
 
 export default function ProductsSidebar({ onAdd, onWishlist, wishlistItems = [] }) {
   const [products, setProducts] = useState([]);
@@ -39,10 +40,21 @@ export default function ProductsSidebar({ onAdd, onWishlist, wishlistItems = [] 
       setError(null);
       try {
         console.log('Fetching products from:', API);
-        const res = await fetch(API);
+        let res = await fetch(API);
+        
+        // If proxied request fails or returns HTML, try direct backend
+        if (!res.ok || res.headers.get('content-type')?.includes('text/html')) {
+          console.warn('Proxied API failed, trying direct backend:', API_FALLBACK);
+          res = await fetch(API_FALLBACK);
+        }
         
         if (!res.ok) {
           throw new Error(`Failed to fetch products: ${res.status} ${res.statusText}`);
+        }
+        
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('Server returned non-JSON response. Check backend server status.');
         }
         
         const data = await res.json();
