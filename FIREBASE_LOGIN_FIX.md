@@ -31,13 +31,13 @@ VITE_BACKEND_URL
 5. **If ANY are missing**, add ALL of them with these values:
 
 ```
-VITE_FIREBASE_API_KEY=AIzaSyCytJd9LdJszmfGA28zvLn9pC0dQ9ikcuU
-VITE_FIREBASE_AUTH_DOMAIN=jrtechinc-44a1f.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=jrtechinc-44a1f
-VITE_FIREBASE_STORAGE_BUCKET=jrtechinc-44a1f.firebasestorage.app
-VITE_FIREBASE_MESSAGING_SENDER_ID=284807188307
-VITE_FIREBASE_APP_ID=1:284807188307:web:ccaada889caadf6ea85ba6
-VITE_FIREBASE_MEASUREMENT_ID=G-G3FZ0QX9BS
+VITE_FIREBASE_API_KEY=AIzaSyDhxcwjpy3KYoghlE60MYG8mKVwyN3BB8o
+VITE_FIREBASE_AUTH_DOMAIN=jrtechinc-fc90b.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=jrtechinc-fc90b
+VITE_FIREBASE_STORAGE_BUCKET=jrtechinc-fc90b.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=212409706164
+VITE_FIREBASE_APP_ID=1:212409706164:web:9d4d5883458fed8ea919e1
+VITE_FIREBASE_MEASUREMENT_ID=G-7N66KZL8VW
 VITE_BACKEND_URL=https://jrtechinc-ecommerce.onrender.com
 ```
 
@@ -49,7 +49,7 @@ VITE_BACKEND_URL=https://jrtechinc-ecommerce.onrender.com
 ### **Step 2: Firebase Console - Add Authorized Domain**
 
 1. Go to https://console.firebase.google.com/
-2. Select project: **jrtechinc-44a1f**
+2. Select project: **jrtechinc-fc90b**
 3. Click **Authentication** (left sidebar)
 4. Click **Settings** tab
 5. Scroll to **Authorized domains** section
@@ -57,7 +57,7 @@ VITE_BACKEND_URL=https://jrtechinc-ecommerce.onrender.com
 7. Add: `jrtechinc-ecommerce.vercel.app` (NO https://, NO trailing slash)
 8. Click **Add**
 9. Verify these domains are listed:
-   - ✅ jrtechinc-44a1f.firebaseapp.com (default)
+   - ✅ jrtechinc-fc90b.firebaseapp.com (default)
    - ✅ localhost
    - ✅ jrtechinc-ecommerce.vercel.app
 
@@ -96,7 +96,7 @@ After adding environment variables, you MUST redeploy:
    - Look for these logs:
    ```
    Firebase configuration loaded successfully
-   Auth Domain: jrtechinc-44a1f.firebaseapp.com
+   Auth Domain: jrtechinc-fc90b.firebaseapp.com
    Current window location: jrtechinc-ecommerce.vercel.app
    ```
 
