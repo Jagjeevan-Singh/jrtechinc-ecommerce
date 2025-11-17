@@ -10,7 +10,7 @@ function postJson(url) {
         res.on('data', c => b += c);
         res.on('end', () => {
           let parsed = b;
-          try { parsed = JSON.parse(b); } catch (e) {}
+          try { parsed = JSON.parse(b); } catch (_e) {}
           resolve({ status: res.statusCode, body: parsed });
         });
       });
@@ -29,12 +29,8 @@ function postJson(url) {
 
   for (const t of tests) {
     try {
-      console.log('---', t.label, '->', t.url);
-      const r = await postJson(t.url);
-      console.log('status:', r.status);
-      console.log('body:', JSON.stringify(r.body, null, 2));
-    } catch (e) {
-      console.error('error calling', t.url, e && e.message);
+      await postJson(t.url);
+    } catch (_e) {
     }
   }
 })();

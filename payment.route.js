@@ -2,22 +2,15 @@ import express from "express";
 import crypto from "crypto";
 import Payment from "./payment.model.js";   // ✅ Correct Import
 import { Product, Order } from "./product.model.js";
-import { razorpayInstance } from "./razorpay.js";
-import Razorpay from "razorpay";
 
 const router = express.Router();
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_SECRET,
-});
-console.log('payment.route.js loaded and router created');
-const HAS_RAZORPAY_KEYS = Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_SECRET);
+
 // ✅ Create Razorpay Order
 router.post("/create-order", async (req, res) => {
   try {
   const { amount, currency, receipt, userEmail } = req.body || {};
   const items = req.body?.items || [];
-    console.log('/api/payment/create-order called', { amount, currency, receipt, userEmail });
+    
 
     // Validate amount
     const numericAmount = Number(amount);
@@ -68,7 +61,7 @@ router.post("/create-order", async (req, res) => {
 
     let order;
     try {
-      console.log('create-order: using razorpay key id:', process.env.RAZORPAY_KEY_ID ? `${String(process.env.RAZORPAY_KEY_ID).slice(0,6)}...${String(process.env.RAZORPAY_KEY_ID).slice(-4)}` : null);
+      
       // Create real order with Razorpay via direct REST call (avoid SDK auth issues)
       try {
         const auth = Buffer.from(`${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_KEY_SECRET}`).toString('base64');
@@ -165,7 +158,7 @@ router.post("/verify-payment", async (req, res) => {
                 name = name || prod.name;
                 price = price || (matchedVariant && matchedVariant.variantPrice) || prod.discountedPrice || prod.mrp || price;
               }
-            } catch (e) {}
+            } catch (_e) {}
           }
 
           if (!variantName && variantSku) {
@@ -177,7 +170,7 @@ router.post("/verify-payment", async (req, res) => {
                 name = name || prodBySku.name;
                 price = price || v?.variantPrice || prodBySku.discountedPrice || prodBySku.mrp || price;
               }
-            } catch (e) {}
+            } catch (_e) {}
           }
 
           if (!variantSku) variantSku = `unknown_sku_${Date.now()}`;
@@ -186,7 +179,7 @@ router.post("/verify-payment", async (req, res) => {
           price = price || 0;
 
           normalizedItems.push({ productId: it.productId || undefined, variantSku, variantName, name, price, quantity });
-        } catch (e) {
+        } catch (_e) {
           normalizedItems.push({ productId: it.productId || undefined, variantSku: '', variantName: 'Default Variant', name: it.name || 'Unknown', price: Number(it.price) || 0, quantity: Number(it.quantity) || 1 });
         }
       }
@@ -207,7 +200,7 @@ router.post("/verify-payment", async (req, res) => {
       for (const ev of paymentRecord.paymentEvents) {
         try {
           normalizedPaymentEvents.push({ timestamp: ev.timestamp ? new Date(ev.timestamp) : new Date(), status: mapEventStatus(ev.status), details: ev.details || (ev.message || '') });
-        } catch (e) {
+        } catch (_e) {
           normalizedPaymentEvents.push({ timestamp: new Date(), status: 'Attempt', details: 'Imported event' });
         }
       }
@@ -236,7 +229,7 @@ router.post("/verify-payment", async (req, res) => {
 
   // MOCK / DEV flow: accept 'order_dev_' ids without HMAC
   if (typeof razorpay_order_id === 'string' && razorpay_order_id.startsWith('order_dev_')) {
-    console.log('verify-payment: accepting mock verification for', razorpay_order_id);
+    
     try {
       // Persist any shipping/deliveryAddress/userEmail provided at verify time
       const upd = { status: 'paid', paymentId: razorpay_payment_id || `mockpay_${Date.now()}` };
@@ -260,7 +253,7 @@ router.post("/verify-payment", async (req, res) => {
       if (!existingOrder) {
         try {
           const created = await createOrderFromPayment(paymentRecord, razorpay_payment_id);
-          console.log('Created Order (mock):', created._id);
+          
         } catch (saveErr) {
           console.error('Failed to save Order document for mock verification:', saveErr);
           console.error(saveErr.stack || saveErr);
@@ -283,7 +276,7 @@ router.post("/verify-payment", async (req, res) => {
 
     if (hash !== String(razorpay_signature)) {
       // Mark payment failed and return 400
-      try { await Payment.findOneAndUpdate({ orderId: razorpay_order_id }, { status: 'failed' }); } catch (e) { console.error('Failed to mark Payment failed:', e); }
+      try { await Payment.findOneAndUpdate({ orderId: razorpay_order_id }, { status: 'failed' }); } catch (_e) { console.error('Failed to mark Payment failed:', _e); }
       return res.status(400).json({ success: false, message: 'Invalid signature' });
     }
 
@@ -304,7 +297,7 @@ router.post("/verify-payment", async (req, res) => {
         }
         try {
           const created = await createOrderFromPayment(paymentRecord || { orderId: razorpay_order_id, amount: 0, items: [] }, razorpay_payment_id);
-          console.log('Created Order after payment verify:', created._id);
+          
         } catch (saveErr) {
           console.error('Failed to save Order document after payment verification:', saveErr);
           console.error(saveErr.stack || saveErr);
@@ -329,7 +322,7 @@ router.post("/verify-payment", async (req, res) => {
 router.get('/test-create-order', async (req, res) => {
   try {
     const options = { amount: 100, currency: 'INR', receipt: `test_rcpt_${Date.now()}` };
-    console.log('test-create-order: creating order with options', options);
+    
 
     if (!(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET)) {
       console.warn('test-create-order: Razorpay keys missing, returning mock order');
@@ -337,7 +330,7 @@ router.get('/test-create-order', async (req, res) => {
       return res.json({ success: true, order: mockOrder, mock: true });
     }
 
-  console.log('test-create-order: using razorpay key id:', process.env.RAZORPAY_KEY_ID ? `${String(process.env.RAZORPAY_KEY_ID).slice(0,6)}...${String(process.env.RAZORPAY_KEY_ID).slice(-4)}` : null);
+  
     // Create via REST API to ensure correct Basic Auth is used
     try {
       const auth = Buffer.from(`${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_KEY_SECRET}`).toString('base64');
@@ -356,7 +349,7 @@ router.get('/test-create-order', async (req, res) => {
         throw rpJson;
       }
       const order = rpJson;
-      console.log('test-create-order: razorpay response', order);
+      
       return res.json({ success: true, order });
     } catch (rpErr) {
       console.error('test-create-order REST call failed:', rpErr);

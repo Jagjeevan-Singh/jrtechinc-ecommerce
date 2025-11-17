@@ -27,7 +27,6 @@
 
   // Utility helpers
   function qs(selector, el=document){ return el.querySelector(selector); }
-  function qsa(selector, el=document){ return Array.from(el.querySelectorAll(selector)); }
 
   // Initialize widget when DOM is ready (support both cases: listener added before or after DOMContentLoaded)
   function initWidget(){
@@ -55,7 +54,7 @@
       const fallbackSpan = toggle.querySelector('#jr-chat-fallback');
 
       // Hide fallback by default (CSS also handles this). Do not toggle it via JS.
-      try { if(fallbackSpan) fallbackSpan.style.display = 'none'; } catch (e) {}
+      try { if(fallbackSpan) fallbackSpan.style.display = 'none'; } catch (_e) {}
 
       if(!img) {
         // No image present; nothing else to do here.
@@ -63,8 +62,8 @@
       }
 
       // For debugging only: log load/error events but do NOT alter visibility or styles.
-      img.addEventListener('load', () => { console.debug('jr-chat: toggle image loaded'); });
-      img.addEventListener('error', () => { console.debug('jr-chat: toggle image failed to load'); });
+      img.addEventListener('load', () => { });
+      img.addEventListener('error', () => { });
     })();
 
     // Render categories and questions into categoriesEl
@@ -244,12 +243,10 @@
     });
 
     // Search interactions
-    let suggestionVisible = false;
     searchInput.addEventListener('input', (e) => {
       const v = e.target.value;
       const matches = getMatches(v);
       renderSuggestions(matches);
-      suggestionVisible = matches.length > 0;
     });
 
     // On Enter: if exact single match or single suggestion, show it; if no matches, show escalation message

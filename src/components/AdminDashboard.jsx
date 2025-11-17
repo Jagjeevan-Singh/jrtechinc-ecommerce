@@ -18,17 +18,16 @@ const ICONS = {
     Image: '🖼️',
     Price: '₹',
     Stock: '📦'
-};
-
-// Minimal notification/toast component used by the admin UI
-const Notification = ({ message, type = 'success', onClose }) => {
-    if (!message) return null;
-    const bg = type === 'error' ? 'background: #FEF3F2; border: 1px solid #FECACA; color: #9B1C1C;' : 'background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46;';
-    return (
-        <div role="status" aria-live="polite" style={{ position: 'fixed', top: 16, right: 16, zIndex: 9999, padding: '10px 14px', borderRadius: 8, boxShadow: '0 6px 18px rgba(0,0,0,0.06)', ...{} }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ flex: 1, fontSize: 14 }}>{message}</div>
-                <button aria-label="Close notification" onClick={onClose} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: 14 }}>✖</button>
+        try {
+            const BACKEND_HOST = import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
+            const res = await fetch(BACKEND_HOST + '/api/orders');
+            if (!res || !res.ok) return setOrders([]);
+            const data = await res.json();
+            setOrders(data);
+        } catch (e) {
+            console.error(e);
+            setOrders([]);
+        }
             </div>
         </div>
     );

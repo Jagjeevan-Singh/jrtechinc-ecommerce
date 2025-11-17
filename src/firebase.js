@@ -17,14 +17,26 @@ const firebaseConfig = {
 // Check if configuration is available before initializing
 if (!firebaseConfig.apiKey) {
   console.error("FIREBASE ERROR: API Key is missing. Check your .env file and ensure variables are prefixed correctly (e.g., VITE_).");
+} else {
+  console.log("Firebase configuration loaded successfully");
 }
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+console.log("Firebase app initialized");
 
 // 2. Initialize and Export Services
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
+
+// Configure Google Auth Provider to prevent popup issues
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
+
+// Add scopes if needed
+googleProvider.addScope('email');
+googleProvider.addScope('profile');
 
 // IMPORTANT: Use named exports to satisfy Login.jsx's import statement
 export { auth, googleProvider };

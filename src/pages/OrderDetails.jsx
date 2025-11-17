@@ -127,11 +127,8 @@ const OrderDetails = () => {
           const augmented = await Promise.all(json.items.map(async (it) => {
                 if (it.productId) {
               try {
-                let pRes;
-                try { pRes = await fetch(`/api/products/${it.productId}`); } catch(e) { pRes = null; }
-                if (!pRes || !pRes.ok) {
-                  try { pRes = await fetch(BACKEND_HOST + `/api/products/${it.productId}`); } catch(e) { pRes = pRes || null; }
-                }
+                let pRes = null;
+                try { pRes = await fetch(BACKEND_HOST + `/api/products/${it.productId}`); } catch(e) { pRes = null; }
                 if (pRes && pRes.ok) {
                   const pJson = await pRes.json();
                   return { ...it, name: it.name || pJson.name, imageUrl: it.imageUrl || pJson.imageUrls?.[0] || pJson.imageUrl };

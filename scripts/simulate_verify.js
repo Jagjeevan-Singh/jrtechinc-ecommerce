@@ -3,7 +3,7 @@ import crypto from 'crypto';
 
 const [,, orderIdArg, paymentIdArg] = process.argv;
 if (!orderIdArg) {
-  console.error('Usage: node simulate_verify.js <order_id> [payment_id]');
+  
   process.exit(2);
 }
 const orderId = orderIdArg;
@@ -19,5 +19,4 @@ const res = await fetch(base + '/api/payment/verify-payment', {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify(body),
 });
-const json = await res.json();
-console.log(JSON.stringify({ orderId, paymentId, signature, status: res.status, response: json }, null, 2));
+await res.json();

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { auth, googleProvider } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import { signInWithPopup, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
+import { getAuthErrorMessage, isPopupError } from '../utils/authErrorHandler';
 import './Login.css';
 
 function Login() {
@@ -16,8 +17,27 @@ function Login() {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
+    
+    // Handle redirect result for Google Auth fallback
+    const handleRedirectResult = async () => {
+      try {
+        const { getRedirectResult } = await import('firebase/auth');
+        const result = await getRedirectResult(auth);
+        if (result) {
+          // User signed in via redirect
+          navigate("/");
+        }
+      } catch (err) {
+        if (err.code !== 'auth/null-user') {
+          console.error('Redirect result error:', err);
+          setError(getAuthErrorMessage(err));
+        }
+      }
+    };
+    
+    handleRedirectResult();
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
@@ -26,17 +46,32 @@ function Login() {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/");
     } catch (err) {
-      setError(err.message);
+      setError(getAuthErrorMessage(err));
     }
   };
 
   const handleGoogleLogin = async () => {
     setError("");
     try {
+      // Try popup first
       await signInWithPopup(auth, googleProvider);
       navigate("/");
     } catch (err) {
-      setError(err.message);
+      console.error('Google sign-in error:', err);
+      
+      // Check if it's a popup blocked error or similar
+      if (isPopupError(err)) {
+        try {
+          // Fallback to redirect method
+          const { signInWithRedirect, getRedirectResult } = await import('firebase/auth');
+          await signInWithRedirect(auth, googleProvider);
+        } catch (redirectErr) {
+          console.error('Redirect sign-in also failed:', redirectErr);
+          setError(getAuthErrorMessage(redirectErr));
+        }
+      } else {
+        setError(getAuthErrorMessage(err));
+      }
     }
   };
 
