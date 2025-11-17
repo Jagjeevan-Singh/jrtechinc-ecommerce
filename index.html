@@ -2,8 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Content Security Policy: allow Firebase, Razorpay, Google fonts and the Render backend -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.gstatic.com https://www.googleapis.com https://apis.google.com https://accounts.google.com; script-src-elem 'self' 'unsafe-inline' https://checkout.razorpay.com https://www.gstatic.com https://www.googleapis.com https://apis.google.com; connect-src 'self' https://jrtechinc-ecommerce.onrender.com https://*.firebaseio.com https://securetoken.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://accounts.google.com https://*.googleapis.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; frame-src https://*.firebaseapp.com https://checkout.razorpay.com https://accounts.google.com https://*.google.com;">
+    <!-- Note: CSP removed to prevent conflicts with Firebase OAuth authentication -->
   <!-- Use company logo as favicon (dev: reference src asset) -->
   <link rel="icon" type="image/jpeg" href="/src/assets/logoround.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
