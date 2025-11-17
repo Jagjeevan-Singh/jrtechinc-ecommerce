@@ -31,15 +31,17 @@ VITE_BACKEND_URL
 5. **If ANY are missing**, add ALL of them with these values:
 
 ```
-VITE_FIREBASE_API_KEY=AIzaSyDhxcwjpy3KYoghlE60MYG8mKVwyN3BB8o
-VITE_FIREBASE_AUTH_DOMAIN=jrtechinc-fc90b.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=jrtechinc-fc90b
-VITE_FIREBASE_STORAGE_BUCKET=jrtechinc-fc90b.firebasestorage.app
-VITE_FIREBASE_MESSAGING_SENDER_ID=212409706164
-VITE_FIREBASE_APP_ID=1:212409706164:web:9d4d5883458fed8ea919e1
-VITE_FIREBASE_MEASUREMENT_ID=G-7N66KZL8VW
+VITE_FIREBASE_API_KEY=<copy_from_your_.env_file>
+VITE_FIREBASE_AUTH_DOMAIN=<copy_from_your_.env_file>
+VITE_FIREBASE_PROJECT_ID=<copy_from_your_.env_file>
+VITE_FIREBASE_STORAGE_BUCKET=<copy_from_your_.env_file>
+VITE_FIREBASE_MESSAGING_SENDER_ID=<copy_from_your_.env_file>
+VITE_FIREBASE_APP_ID=<copy_from_your_.env_file>
+VITE_FIREBASE_MEASUREMENT_ID=<copy_from_your_.env_file>
 VITE_BACKEND_URL=https://jrtechinc-ecommerce.onrender.com
 ```
+
+**⚠️ SECURITY WARNING:** Never commit your actual API keys to Git. Copy these values from your local `.env` file.
 
 6. **Set environment to:** Production (check the box)
 7. Click **Save**

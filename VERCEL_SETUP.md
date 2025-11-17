@@ -16,17 +16,19 @@ Go to [Firebase Console](https://console.firebase.google.com/) → Your Project 
 ### ✅ 2. Vercel Environment Variables
 Go to [Vercel Dashboard](https://vercel.com/dashboard) → Your Project → Settings → Environment Variables
 
-**Add ALL these variables:**
+**Add ALL these variables from your .env file:**
 ```
-VITE_FIREBASE_API_KEY=AIzaSyDhxcwjpy3KYoghlE60MYG8mKVwyN3BB8o
-VITE_FIREBASE_AUTH_DOMAIN=jrtechinc-fc90b.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=jrtechinc-fc90b
-VITE_FIREBASE_STORAGE_BUCKET=jrtechinc-fc90b.firebasestorage.app
-VITE_FIREBASE_MESSAGING_SENDER_ID=212409706164
-VITE_FIREBASE_APP_ID=1:212409706164:web:9d4d5883458fed8ea919e1
-VITE_FIREBASE_MEASUREMENT_ID=G-7N66KZL8VW
+VITE_FIREBASE_API_KEY=<your_api_key>
+VITE_FIREBASE_AUTH_DOMAIN=<your_auth_domain>
+VITE_FIREBASE_PROJECT_ID=<your_project_id>
+VITE_FIREBASE_STORAGE_BUCKET=<your_storage_bucket>
+VITE_FIREBASE_MESSAGING_SENDER_ID=<your_sender_id>
+VITE_FIREBASE_APP_ID=<your_app_id>
+VITE_FIREBASE_MEASUREMENT_ID=<your_measurement_id>
 VITE_BACKEND_URL=https://jrtechinc-ecommerce.onrender.com
 ```
+
+**Important:** Copy these values from your local `.env` file, NOT from this documentation.
 
 **IMPORTANT:** After adding variables, you MUST redeploy for changes to take effect.
 

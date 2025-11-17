@@ -18,22 +18,9 @@ const ICONS = {
     Image: '🖼️',
     Price: '₹',
     Stock: '📦'
-        try {
-            const BACKEND_HOST = import.meta.env.VITE_BACKEND_URL || 'https://jrtechinc-ecommerce.onrender.com';
-            const res = await fetch(BACKEND_HOST + '/api/orders');
-            if (!res || !res.ok) return setOrders([]);
-            const data = await res.json();
-            setOrders(data);
-        } catch (e) {
-            console.error(e);
-            setOrders([]);
-        }
-            </div>
-        </div>
-    );
 };
 
-// 2. Dynamic Input for Arrays
+// Minimal notification/toast component used by the admin UI
 const ArrayEditor = ({ label, items, onChange, structure, canAdd = true }) => {
     const handleItemChange = (index, key, value) => {
         const newItems = items.map((item, i) => (
