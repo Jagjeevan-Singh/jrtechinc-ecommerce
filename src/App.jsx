@@ -25,6 +25,7 @@ import CheckoutPage from "./pages/CheckoutPage";   // ✅ NEW
 import OrderSuccess from "./pages/OrderSuccess";
 import OrderDetails from "./pages/OrderDetails";
 import ProductsSidebar from "./pages/ProductsSidebar";
+import FirebaseDebug from "./pages/FirebaseDebug";
 
 import "./App.css";
 
@@ -171,6 +172,7 @@ function App() {
     <Router>
       <Routes>
 
+        <Route path="/firebase-debug" element={<FirebaseDebug />} />
         <Route path="/admin-login" element={<AdminDashboard />} />
 
         <Route path="/account" element={

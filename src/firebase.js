@@ -19,6 +19,9 @@ if (!firebaseConfig.apiKey) {
   console.error("FIREBASE ERROR: API Key is missing. Check your .env file and ensure variables are prefixed correctly (e.g., VITE_).");
 } else {
   console.log("Firebase configuration loaded successfully");
+  console.log("Auth Domain:", firebaseConfig.authDomain);
+  console.log("Project ID:", firebaseConfig.projectId);
+  console.log("Current window location:", window.location.hostname);
 }
 
 // Initialize Firebase

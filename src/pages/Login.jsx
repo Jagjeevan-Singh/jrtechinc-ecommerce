@@ -52,12 +52,20 @@ function Login() {
 
   const handleGoogleLogin = async () => {
     setError("");
+    console.log('🔐 Starting Google sign-in...');
+    console.log('Current domain:', window.location.hostname);
+    console.log('Auth domain from config:', auth.config?.authDomain);
+    
     try {
       // Try popup first
-      await signInWithPopup(auth, googleProvider);
+      console.log('Attempting popup sign-in...');
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log('✅ Sign-in successful:', result.user.email);
       navigate("/");
     } catch (err) {
-      console.error('Google sign-in error:', err);
+      console.error('❌ Google sign-in error:', err);
+      console.error('Error code:', err.code);
+      console.error('Error message:', err.message);
       
       // Check if it's a popup blocked error or similar
       if (isPopupError(err)) {
